@@ -16,6 +16,7 @@ import FlashcardTest from "./flashcards/FlashcardTest";
 import { AuthProvider } from "./authentication/AuthProvider";
 import ForgotPassword from "./authentication/ForgotPassword";
 import ResetPassword from "./authentication/ResetPassword";
+import ManageNotes from "./notes/ManageNotes";
 
 function App() {
   return (

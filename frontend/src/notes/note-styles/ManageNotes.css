@@ -1,0 +1,26 @@
+.note-container{
+    outline: 2px solid red;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.note-content-container{
+    position: relative;
+    outline: 1px solid red;
+}
+
+.note-content{
+    height: 30em;
+    width: 50em;
+    border: 0.075em solid #fff;
+    border-radius: 0.5em;
+    padding: 0 1em;
+}
+
+.placeholder{
+    position: absolute;
+    top: 1em;
+    left: 1em;
+}
