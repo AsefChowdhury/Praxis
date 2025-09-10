@@ -8,19 +8,33 @@
 
 .note-content-container{
     position: relative;
-    outline: 1px solid red;
+    /* outline: 2px solid red; */
 }
 
 .note-content{
-    height: 30em;
+    height: 35em;
     width: 50em;
     border: 0.075em solid #fff;
-    border-radius: 0.5em;
     padding: 0 1em;
 }
 
 .placeholder{
     position: absolute;
-    top: 1em;
+    top: 3em;
     left: 1em;
+}
+
+
+/*Lexical themeing CSS*/
+.editor-textBold{
+    font-weight: bold;
+}
+
+.editor-textItalic{
+    font-style: italic;
+}
+
+.editor-textUnderline{
+    text-decoration: underline;
+    
 }
