@@ -1,10 +1,19 @@
 import "./note-styles/ManageNotes.css";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import Toolbar from "../components/Toolbar/Toolbar";
+import { ListItemNode, ListNode } from "@lexical/list";
 
-const theme = {};
+const theme = {
+    text: {
+        bold: 'editor-textBold',
+        italic: 'editor-textItalic',
+        underline: 'editor-textUnderline'
+    }
+};
 
 function onError(error:Error): void {
     console.error(error);
@@ -13,15 +22,20 @@ function onError(error:Error): void {
 function ManageNotes() {
     const initialConfig = {
         namespace: 'MyEditor',
+        nodes: [
+            ListNode,
+            ListItemNode
+        ],
         theme,
         onError
     }
 
     return(
         <div className="note-container">
-            <div className="toolbar-container"></div>
             <div className="note-content-container">
                 <LexicalComposer initialConfig={initialConfig}>
+                    <Toolbar/>
+                    <ListPlugin/>
                     <RichTextPlugin
                         contentEditable={<ContentEditable className="note-content"/>}
                         placeholder={<div className="placeholder">Enter some text</div>}

@@ -1,14 +1,6 @@
-.temp-wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
 .toolbar-container{
     display: flex;
-    outline: 2px solid red;
-    width: 50%;
+    border: 0.075em solid #fff;
     height: 2em;
     align-items: center;
 
@@ -17,6 +9,7 @@
 .history{
     outline: 2px solid gold;
     margin-right: 1em;
+    margin-left: 1em;
 }
 
 .styling-options{
