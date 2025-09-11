@@ -99,25 +99,25 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         const anchorNode = findNodes.anchorNode;
 
         // Get parent nodes
-        const anchorParentNode = findNodes.anchorParentNode;
-        const focusParentNode = findNodes.focusParentNode;
+        const anchorNodeParent = findNodes.anchorParentNode;
+        const focusNodeParent = findNodes.focusParentNode;
         
         // Check if nodes are null
-        if (anchorParentNode === null || focusParentNode === null) return false;
+        if (anchorNodeParent === null || focusNodeParent === null) return false;
 
         if ($isListItemNode(anchorNode)) {
             anchorTargetNode = anchorNode;
         }
         else{
-            anchorTargetNode = anchorParentNode;
+            anchorTargetNode = anchorNodeParent;
         }
 
         const anchorNodeTag = getListFormat(anchorTargetNode);        
 
-        if((isListType(anchorParentNode) && isListType(focusParentNode)) && (anchorNodeTag == listTagMap[formatChoice])){
+        if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag == listTagMap[formatChoice])){
             removeList(editor);
         }
-        else if((isListType(anchorParentNode) && isListType(focusParentNode)) && (anchorNodeTag != listTagMap[formatChoice])){
+        else if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag != listTagMap[formatChoice])){
             removeList(editor);
             insertList(editor, formatChoice);
         }
