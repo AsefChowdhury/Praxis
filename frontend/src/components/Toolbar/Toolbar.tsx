@@ -5,7 +5,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
 type Styles = "Bold" | "Italic"| "Underline";
-type Formats = "Bulleted List" | "Numbered List";
+type ListFormats = "Bulleted List" | "Numbered List";
 type ListType = "bullet" | "number";
 
 const styleMap = {
@@ -14,7 +14,7 @@ const styleMap = {
     "Underline" : "underline"
 }
 
-const formatMap = {
+const listTypeMap = {
     "Bulleted List" : "bullet",
     "Numbered List" : "number"
 }
@@ -48,7 +48,7 @@ function findAnchorAndFocusNodes() {
     const anchorParentNode = anchorNode.getParent();
     const focusParentNode = focusNode.getParent();
 
-    return {anchorParentNode, focusParentNode};
+    return {anchorNode, anchorParentNode, focusNode, focusParentNode};
 }
 
 function isListType(node: LexicalNode) {
@@ -66,6 +66,7 @@ function getListFormat(node: LexicalNode){
     // Get the tag of the parent node
     return (parentNode as ListNode).getTag();
 }
+
 
 function insertList(editor: LexicalEditor, formatChoice: ListType){
     // Switch-Case used to apply specific list formartting based on formatChoice given
@@ -94,16 +95,31 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         const findNodes = findAnchorAndFocusNodes();
         if (findNodes == false) return false;
         
+        let anchorTargetNode = null;
+        const anchorNode = findNodes.anchorNode;
+
         // Get parent nodes
-        const anchorNode = findNodes.anchorParentNode;
-        const focusNode = findNodes.focusParentNode;
+        const anchorParentNode = findNodes.anchorParentNode;
+        const focusParentNode = findNodes.focusParentNode;
         
         // Check if nodes are null
-        if (anchorNode === null || focusNode === null) return false;
-        const anchorNodeTag = getListFormat(anchorNode);        
+        if (anchorParentNode === null || focusParentNode === null) return false;
 
-        if((isListType(anchorNode) && isListType(focusNode)) && (anchorNodeTag == listTagMap[formatChoice])){
+        if ($isListItemNode(anchorNode)) {
+            anchorTargetNode = anchorNode;
+        }
+        else{
+            anchorTargetNode = anchorParentNode;
+        }
+
+        const anchorNodeTag = getListFormat(anchorTargetNode);        
+
+        if((isListType(anchorParentNode) && isListType(focusParentNode)) && (anchorNodeTag == listTagMap[formatChoice])){
             removeList(editor);
+        }
+        else if((isListType(anchorParentNode) && isListType(focusParentNode)) && (anchorNodeTag != listTagMap[formatChoice])){
+            removeList(editor);
+            insertList(editor, formatChoice);
         }
         else{
             insertList(editor, formatChoice);
@@ -126,10 +142,10 @@ function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
     const styles: Styles[] = ["Bold", "Italic", "Underline"];
-    const formats: Formats[] = ["Bulleted List", "Numbered List"];
+    const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
 
     const [activeStyles, setActiveStyles] = useState<Styles[]>([]);
-    const [activeFormat, setActiveFormat] = useState<Formats[]>([]);
+    const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
 
     return(
         <div className="toolbar-container">
@@ -155,14 +171,14 @@ function Toolbar() {
             
             {/*Formatting */}
             <div className="formatting-options">
-                {formats.map(format => (
+                {listFormats.map(listFormat => (
                     <button
-                    key={format}
-                    className={`format-button ${activeFormat.includes(format) ? "active" : ""}`}
+                    key={listFormat}
+                    className={`format-button ${activeFormat.includes(listFormat) ? "active" : ""}`}
                     onClick={() => {
-                        toggleListFormat(editor, formatMap[format] as ListType)
+                        toggleListFormat(editor, listTypeMap[listFormat] as ListType)
                     }}
-                    >{format}</button>
+                    >{listFormat}</button>
                 ))}
                 {/*Alignment tsx*/}
             </div>
