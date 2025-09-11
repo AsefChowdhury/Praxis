@@ -94,6 +94,14 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         const findNodes = findAnchorAndFocusNodes();
         if (findNodes == false) return false;
         
+        // Declare target nodes
+        let anchorTargetNode = null;
+        let focusTargetNode = null;
+
+        // Get anchor node
+        const anchorNode = findNodes.anchorNode;
+        const focusNode = findNodes.focusNode;
+
         // Get parent nodes
         const anchorNode = findNodes.anchorParentNode;
         const focusNode = findNodes.focusParentNode;
@@ -102,11 +110,30 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         if (anchorNode === null || focusNode === null) return false;
         const anchorNodeTag = getListFormat(anchorNode);        
 
-        if((isListType(anchorNode) && isListType(focusNode)) && (anchorNodeTag == listTagMap[formatChoice])){
+        // Get correct target node based on condition
+        if ($isListItemNode(anchorNode) && $isListItemNode(focusNode)) {
+            anchorTargetNode = anchorNode;
+            focusTargetNode = focusNode;
+        }
+        else{
+            anchorTargetNode = anchorNodeParent;
+            focusTargetNode = focusNodeParent;
+        }
+
+        const anchorNodeTag = getListFormat(anchorTargetNode);
+        const focusNodeTag = getListFormat(focusTargetNode);        
+
+        if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag == listTagMap[formatChoice] && focusNodeTag == listTagMap[formatChoice])){
             removeList(editor);
+            console.log("Remove list")
+        }
+        else if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag != listTagMap[formatChoice])){
+            insertList(editor, formatChoice);
+            console.log("conversion")
         }
         else{
             insertList(editor, formatChoice);
+            console.log("insertion")
         }
     })
 }
