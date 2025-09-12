@@ -1,12 +1,13 @@
 import "./Toolbar.css";
 import { useState } from "react";
-import { $getNodeByKey, $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, type LexicalEditor, type LexicalNode, type TextFormatType } from "lexical";
+import { $getNodeByKey, $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, REDO_COMMAND, UNDO_COMMAND, type LexicalEditor, type LexicalNode, type TextFormatType } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
 type TextStyles = "Bold" | "Italic"| "Underline";
 type ListFormats = "Bulleted List" | "Numbered List";
 type ListType = "bullet" | "number";
+type HistoryCommands = "Undo" | "Redo";
 
 const styleMap = {
     "Bold" : "bold",
@@ -146,12 +147,30 @@ function toggleStyle(editor: LexicalEditor, styleChoice: TextFormatType) {
     })
 }
 
+function handleHistory(editor: LexicalEditor, historyChoice: string){
+    switch (historyChoice) {
+        case "Undo":
+            editor.dispatchCommand(UNDO_COMMAND, undefined);
+            console.log("undo");
+            break;
+        
+        case "Redo":
+            editor.dispatchCommand(REDO_COMMAND, undefined);
+            console.log("redo");
+            break
+        
+        default:
+            break;
+    }
+}
+
 
 function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
     const textStyles: TextStyles[] = ["Bold", "Italic", "Underline"];
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
+    const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
 
     const [activeStyles, setActiveStyles] = useState<TextStyles[]>([]);
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
@@ -160,8 +179,15 @@ function Toolbar() {
         <div className="toolbar-container">
             {/*Undo/Redo */}
             <div className="history">
-                <button className="undo">Undo</button>
-                <button className="redo">Redo</button>
+                {historyCommands.map(historyCommand => (
+                    <button
+                    key={historyCommand}
+                    className="history-button"
+                    onClick={() => {
+                        handleHistory(editor, historyCommand)
+                    }}
+                    >{historyCommand}</button>
+                ))}
             </div>
 
             {/*Styling */}
