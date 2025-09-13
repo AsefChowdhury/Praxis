@@ -1,6 +1,6 @@
 import "./Toolbar.css";
-import { useState } from "react";
-import { $getNodeByKey, $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, REDO_COMMAND, UNDO_COMMAND, type LexicalEditor, type LexicalNode, type TextFormatType } from "lexical";
+import { useEffect, useState } from "react";
+import { $getNodeByKey, $getSelection, $isRangeSelection, CAN_REDO_COMMAND, CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, FORMAT_TEXT_COMMAND, REDO_COMMAND, UNDO_COMMAND, type LexicalEditor, type LexicalNode, type TextFormatType } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
@@ -151,19 +151,16 @@ function handleHistory(editor: LexicalEditor, historyChoice: string){
     switch (historyChoice) {
         case "Undo":
             editor.dispatchCommand(UNDO_COMMAND, undefined);
-            console.log("undo");
             break;
         
         case "Redo":
             editor.dispatchCommand(REDO_COMMAND, undefined);
-            console.log("redo");
             break
         
         default:
             break;
     }
 }
-
 
 function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
@@ -174,6 +171,33 @@ function Toolbar() {
 
     const [activeStyles, setActiveStyles] = useState<TextStyles[]>([]);
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
+    const [canUndo, setCanUndo] = useState<Boolean>(false);
+    const [canRedo, setCanRedo] = useState<Boolean>(false);   
+
+    useEffect(() => {
+        const unregisterUndo = editor.registerCommand(
+            CAN_UNDO_COMMAND,
+            (payload) => {
+                setCanUndo(payload);
+                return false;
+            },
+            COMMAND_PRIORITY_LOW
+        );
+
+        const unregisterRedo = editor.registerCommand(
+            CAN_REDO_COMMAND,
+            (payload) => {
+                setCanRedo(payload);
+                return false;
+            },
+            COMMAND_PRIORITY_LOW
+        );
+
+        return () => {
+            unregisterUndo();
+            unregisterRedo();
+        }
+    },[editor]);  
 
     return(
         <div className="toolbar-container">
@@ -182,7 +206,8 @@ function Toolbar() {
                 {historyCommands.map(historyCommand => (
                     <button
                     key={historyCommand}
-                    className="history-button"
+                    className={`history-button ${(historyCommand === "Undo" && !canUndo) || (historyCommand === "Redo" && !canRedo) ? "disabled" : ""}`}
+                    disabled={(historyCommand === "Undo" && !canUndo) || (historyCommand === "Redo" && !canRedo)}
                     onClick={() => {
                         handleHistory(editor, historyCommand)
                     }}
