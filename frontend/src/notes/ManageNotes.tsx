@@ -5,14 +5,16 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
-import Toolbar from "../components/toolbar/Toolbar";
+import Toolbar from "../components/Toolbar/Toolbar";
 import { ListItemNode, ListNode } from "@lexical/list";
 
 const theme = {
     text: {
         bold: 'editor-textBold',
         italic: 'editor-textItalic',
-        underline: 'editor-textUnderline'
+        underline: 'editor-textUnderline',
+        uppercase: 'editor-textUppercase',
+        lowercase: 'editor-textLowercase'
     }
 };
 

@@ -1,18 +1,26 @@
 import "./Toolbar.css";
 import { useEffect, useState } from "react";
-import { $getNodeByKey, $getSelection, $isRangeSelection, CAN_REDO_COMMAND, CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, FORMAT_TEXT_COMMAND, REDO_COMMAND, UNDO_COMMAND, type LexicalEditor, type LexicalNode, type TextFormatType } from "lexical";
+import { $getNodeByKey, $getSelection, $isRangeSelection, CAN_REDO_COMMAND, 
+        CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND, REDO_COMMAND, 
+        UNDO_COMMAND, type LexicalCommand, type LexicalEditor, type LexicalNode, type TextFormatType} from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
-type TextStyles = "Bold" | "Italic"| "Underline";
+type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase";
 type ListFormats = "Bulleted List" | "Numbered List";
 type ListType = "bullet" | "number";
 type HistoryCommands = "Undo" | "Redo";
+type StyleCommand = {payload: string; command: LexicalCommand<string>};
 
-const styleMap = {
-    "Bold" : "bold",
-    "Italic" : "italic",
-    "Underline" : "underline"
+const styleMap: Record<TextStyles, StyleCommand> = {
+    "Bold" : {payload: "bold", command: FORMAT_TEXT_COMMAND},
+    "Italic" : {payload: "italic", command: FORMAT_TEXT_COMMAND},
+    "Underline" : {payload: "underline", command: FORMAT_TEXT_COMMAND},
+    "Superscript" : {payload: "superscript", command: FORMAT_TEXT_COMMAND},
+    "Subscript" : {payload: "subscript", command: FORMAT_TEXT_COMMAND},
+    "Code" : {payload: "code", command: FORMAT_TEXT_COMMAND},
+    "Lowercase" : {payload: "lowercase", command: FORMAT_TEXT_COMMAND},
+    "Uppercase" : {payload: "uppercase", command: FORMAT_TEXT_COMMAND}
 }
 
 const formatMap = {
@@ -136,14 +144,13 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
     })
 }
 
-function toggleStyle(editor: LexicalEditor, styleChoice: TextFormatType) {
+function toggleStyle(editor: LexicalEditor, styleObj: {payload: string, command: LexicalCommand<string>}) {
+    let {payload, command} = styleObj;
+
     editor.update(() => {
         const selection = $getSelection(); // get the current selection
-    
-        // check if the selection has a range
-        if ($isRangeSelection(selection)) {
-             editor.dispatchCommand(FORMAT_TEXT_COMMAND, styleChoice); // Apply styling
-        } 
+        if (!$isRangeSelection(selection)) return false;
+        editor.dispatchCommand(command, payload);
     })
 }
 
@@ -165,7 +172,7 @@ function handleHistory(editor: LexicalEditor, historyChoice: string){
 function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
-    const textStyles: TextStyles[] = ["Bold", "Italic", "Underline"];
+    const textStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Superscript", "Subscript", "Code", "Lowercase", "Uppercase"];
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
     const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
 
@@ -174,6 +181,7 @@ function Toolbar() {
     const [canUndo, setCanUndo] = useState<Boolean>(false);
     const [canRedo, setCanRedo] = useState<Boolean>(false);   
 
+    // useEffect used to enable/disable undo/redo buttons
     useEffect(() => {
         const unregisterUndo = editor.registerCommand(
             CAN_UNDO_COMMAND,
@@ -222,7 +230,7 @@ function Toolbar() {
                     key={textStyle}
                     className={`style-button ${activeStyles.includes(textStyle) ? "active" : ""}`}
                     onClick={() => {
-                        toggleStyle(editor, styleMap[textStyle] as TextFormatType)
+                        toggleStyle(editor, styleMap[textStyle])
                     }}
                     >{textStyle}</button>
                 ))}

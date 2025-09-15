@@ -38,3 +38,11 @@
     text-decoration: underline;
     
 }
+
+.editor-textUppercase{
+    text-transform: uppercase;
+}
+
+.editor-textLowercase{
+    text-transform: lowercase;
+}
