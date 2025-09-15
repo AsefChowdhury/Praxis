@@ -12,6 +12,8 @@ type ListType = "bullet" | "number";
 type HistoryCommands = "Undo" | "Redo";
 type StyleCommand = {payload: string; command: LexicalCommand<string>};
 
+const textStylesArray = ["Bold", "Italic", "Underline", "Superscript", "Subscript", "Code", "Lowercase", "Uppercase"];
+
 const styleMap: Record<TextStyles, StyleCommand> = {
     "Bold" : {payload: "bold", command: FORMAT_TEXT_COMMAND},
     "Italic" : {payload: "italic", command: FORMAT_TEXT_COMMAND},
@@ -34,6 +36,11 @@ const listTagMap: Record<ListType, string> = {
 }
 
 // Helper functions:
+
+function isTextStyles(value: string): value is TextStyles{
+    if (!textStylesArray.includes(value)) return false
+    return true
+}
 
 function findAnchorAndFocusNodes() {
     // Get the selection
@@ -172,7 +179,8 @@ function handleHistory(editor: LexicalEditor, historyChoice: string){
 function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
-    const textStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Superscript", "Subscript", "Code", "Lowercase", "Uppercase"];
+    const coreTextStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Code"];
+    const extendedTextStyles: TextStyles[] = ["Subscript", "Superscript", "Lowercase", "Uppercase"];
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
     const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
 
@@ -225,15 +233,34 @@ function Toolbar() {
 
             {/*Styling */}
             <div className="styling-options">
-                {textStyles.map(textStyle => (
+                {/* .map() below used to display core styling options */}
+                {coreTextStyles.map(coreTextStyle => (
                     <button 
-                    key={textStyle}
-                    className={`style-button ${activeStyles.includes(textStyle) ? "active" : ""}`}
+                    key={coreTextStyle}
+                    className={`style-button ${activeStyles.includes(coreTextStyle) ? "active" : ""}`}
                     onClick={() => {
-                        toggleStyle(editor, styleMap[textStyle])
+                        toggleStyle(editor, styleMap[coreTextStyle])
                     }}
-                    >{textStyle}</button>
+                    >{coreTextStyle}</button>
                 ))}
+
+                {/* .map() below used to display extended styling options */}
+                <select 
+                className="extended-styling-options"
+                onChange={(event) => {
+                    if(isTextStyles(event.target.value)){
+                        toggleStyle(editor, styleMap[event.target.value])
+                    }
+                }}>
+                    {extendedTextStyles.map(extendedTextStyle => (
+                        <option
+                        value={extendedTextStyle}
+                        key={extendedTextStyle}
+                        className="style-option"
+                        selected={activeStyles.includes(extendedTextStyle)}
+                        >{extendedTextStyle}</option>
+                    ))}
+                </select>
                 {/* Fontsize tsx */}
             </div>
             
