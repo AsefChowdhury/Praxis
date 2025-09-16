@@ -5,6 +5,8 @@ import { $getNodeByKey, $getSelection, $isRangeSelection, CAN_REDO_COMMAND,
         UNDO_COMMAND, type LexicalCommand, type LexicalEditor, type LexicalNode, type TextFormatType} from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
+import Dropdown from "../dropdown/Dropdown";
+import DropdownItem from "../dropdown/DropdownItem";
 
 type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase";
 type ListFormats = "Bulleted List" | "Numbered List";
@@ -38,7 +40,7 @@ const listTagMap: Record<ListType, string> = {
 // Helper functions:
 
 function isTextStyles(value: string): value is TextStyles{
-    if (!textStylesArray.includes(value)) return false
+    if (!textStylesArray.includes(value)) return false;
     return true
 }
 
@@ -186,6 +188,7 @@ function Toolbar() {
 
     const [activeStyles, setActiveStyles] = useState<TextStyles[]>([]);
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
+    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const [canUndo, setCanUndo] = useState<Boolean>(false);
     const [canRedo, setCanRedo] = useState<Boolean>(false);   
 
@@ -214,6 +217,15 @@ function Toolbar() {
             unregisterRedo();
         }
     },[editor]);  
+
+    // Helper functions
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (anchor !== null) {
+            setAnchor(null);
+            return;
+        };
+        setAnchor(event.currentTarget);
+    };
 
     return(
         <div className="toolbar-container">
@@ -245,22 +257,24 @@ function Toolbar() {
                 ))}
 
                 {/* .map() below used to display extended styling options */}
-                <select 
-                className="extended-styling-options"
-                onChange={(event) => {
-                    if(isTextStyles(event.target.value)){
-                        toggleStyle(editor, styleMap[event.target.value])
-                    }
-                }}>
-                    {extendedTextStyles.map(extendedTextStyle => (
-                        <option
-                        value={extendedTextStyle}
-                        key={extendedTextStyle}
-                        className="style-option"
-                        selected={activeStyles.includes(extendedTextStyle)}
-                        >{extendedTextStyle}</option>
+                <div className="extended-styling-container">
+                    <button onClick={handleClick}>BUTTON</button>
+                    <Dropdown
+                    anchor={anchor}
+                    open={anchor !== null}
+                    onClose={() => {setAnchor(null)}}
+                    > 
+                        {extendedTextStyles.map(extendedTextStyle => (
+                        <DropdownItem
+                        text={extendedTextStyle}
+                        onClick={() => {toggleStyle(editor, styleMap[extendedTextStyle])}}
+                        // selected={activeStyles.includes(extendedTextStyle)}
+                        ></DropdownItem>
                     ))}
-                </select>
+
+                    </Dropdown>
+                </div>
+
                 {/* Fontsize tsx */}
             </div>
             

@@ -15,8 +15,14 @@
 .styling-options{
     outline: 2px solid violet;
     margin-right: 1em;
+    display: flex;
 }
 
 .formatting-options{
     outline: 2px solid greenyellow;
+}
+
+.extended-styling-container{
+    display: flex;
+    position: relative;
 }
