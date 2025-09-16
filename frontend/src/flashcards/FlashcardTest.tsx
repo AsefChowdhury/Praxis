@@ -1,5 +1,5 @@
 import Card from "../components/card/Card";
-import IconButton from "../components/IconButton/IconButton";
+import IconButton from "../components/icon-button/IconButton";
 import close from '../assets/close.svg?react'
 import tick from '../assets/tick.svg?react'
 import flip from '../assets/flip.svg?react'

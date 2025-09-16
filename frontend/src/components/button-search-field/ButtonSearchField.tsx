@@ -2,7 +2,7 @@ import search from '../../assets/search.svg';
 import close from '../../assets/close.svg?react';
 import './ButtonSearchField.css'
 import { useState } from 'react';
-import IconButton from '../IconButton/IconButton';
+import IconButton from "../icon-button/IconButton";
 
 function ButtonSearchField () {
     const [searchTerm, setSearchTerm] = useState('');

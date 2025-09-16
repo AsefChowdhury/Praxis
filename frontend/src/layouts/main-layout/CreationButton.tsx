@@ -6,7 +6,7 @@ import notes from '../../assets/notes.svg?react'
 import quizzes from '../../assets/quizzes.svg?react'
 import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';
-import IconButton from '../../components/IconButton/IconButton';
+import IconButton from "../../components/icon-button/IconButton";
 
 function CreationButton() {
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);

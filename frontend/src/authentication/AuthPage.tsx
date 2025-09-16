@@ -1,4 +1,4 @@
-import IconButton from "../components/IconButton/IconButton"
+import IconButton from "../components/icon-button/IconButton";
 import InputField from "../components/input-field/InputField"
 import "./authentication-styles/AuthPage.css"
 import visible from "../assets/visible.svg?react"

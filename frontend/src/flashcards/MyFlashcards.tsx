@@ -1,5 +1,5 @@
 import Card from "../components/card/Card"
-import IconButton from "../components/IconButton/IconButton"
+import IconButton from "../components/icon-button/IconButton";
 import editIcon from "../assets/edit.svg?react"
 import deleteIcon from "../assets/delete.svg?react"
 import { useEffect, useState } from "react"

@@ -1,5 +1,5 @@
 import DrawerItem from "../../components/side-drawer/DrawerItem";
-import IconButton from "../../components/IconButton/IconButton";
+import IconButton from "../../components/icon-button/IconButton";
 import NavigationBar from "../../components/navigation-bar/NavigationBar";
 import { Link, Outlet, NavLink } from "react-router-dom";
 import { useState, type ReactElement } from "react";

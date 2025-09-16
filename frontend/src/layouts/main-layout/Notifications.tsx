@@ -1,4 +1,4 @@
-import IconButton from '../../components/IconButton/IconButton'
+import IconButton from "../../components/icon-button/IconButton";
 import notifications from '../../assets/notifications.svg?react'
 
 function Notifications(){

@@ -11,7 +11,7 @@ import ButtonSearchField from "../../components/button-search-field/ButtonSearch
 import Notifications from "./Notifications"
 import Profile from "./Profile"
 import NavigationBar from "../../components/navigation-bar/NavigationBar"
-import IconButton from "../../components/IconButton/IconButton"
+import IconButton from "../../components/icon-button/IconButton";
 import { useState } from "react"
 import CreationButton from "./CreationButton"
 
