@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import './dropdown-styles/Dropdown.css'
 
 type DropdownProps = {
-    anchor: HTMLElement;
+    anchor: HTMLElement | null;
     children: React.ReactNode;
     open: boolean;
     onClose: () => void
@@ -14,6 +14,7 @@ function Dropdown(props: DropdownProps) {
     useEffect(() => {
         if(!props.open) return;
         const handleClickOutside = (event: MouseEvent) => {
+            if (props.anchor === null) return;
 
             const eventTarget = event.target as Node;
 
