@@ -46,3 +46,7 @@
 .editor-textLowercase{
     text-transform: lowercase;
 }
+
+.editor-textStrikethrough{
+    text-decoration: line-through;
+}

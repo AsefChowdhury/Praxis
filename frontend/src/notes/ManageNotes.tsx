@@ -14,7 +14,8 @@ const theme = {
         italic: 'editor-textItalic',
         underline: 'editor-textUnderline',
         uppercase: 'editor-textUppercase',
-        lowercase: 'editor-textLowercase'
+        lowercase: 'editor-textLowercase',
+        strikethrough: 'editor-textStrikethrough',
     }
 };
 
