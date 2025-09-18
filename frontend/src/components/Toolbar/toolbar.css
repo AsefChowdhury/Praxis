@@ -18,11 +18,18 @@
     display: flex;
 }
 
-.formatting-options{
-    outline: 2px solid greenyellow;
-}
-
 .extended-styling-container{
     display: flex;
     position: relative;
 }
+
+.formatting-options{
+    outline: 2px solid greenyellow;
+    display: flex;
+}
+
+.text-alignment-container{
+    display: flex;
+    position: relative;
+}
+

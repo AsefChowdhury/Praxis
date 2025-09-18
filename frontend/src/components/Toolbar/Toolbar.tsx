@@ -1,22 +1,25 @@
 import "./Toolbar.css";
-import { useEffect, useState } from "react";
+import Dropdown from "../dropdown/Dropdown";
+import DropdownItem from "../dropdown/DropdownItem";
+import React, { useEffect, useState } from "react";
 import { $getNodeByKey, $getSelection, $isRangeSelection, CAN_REDO_COMMAND, 
         CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, FORMAT_TEXT_COMMAND, FORMAT_ELEMENT_COMMAND, REDO_COMMAND, 
         UNDO_COMMAND, type LexicalCommand, type LexicalEditor, type LexicalNode, type TextFormatType} from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
-import Dropdown from "../dropdown/Dropdown";
-import DropdownItem from "../dropdown/DropdownItem";
 
-type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase";
+type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase" | "Strikethrough";
+type AlignmentOptions = "Left" | "Start" | "Center" | "Right" | "End" | "Justify";
 type ListFormats = "Bulleted List" | "Numbered List";
 type ListType = "bullet" | "number";
 type HistoryCommands = "Undo" | "Redo";
-type StyleCommand = {payload: string; command: LexicalCommand<string>};
+type EditorCommand = {payload: string; command: LexicalCommand<string>};
+type StateAndSetter<T> = {state: T, setter: React.Dispatch<React.SetStateAction<T>>};
+type ToolbarAnchors = "extendedStyles" | "alignmentOptions";
 
-const textStylesArray = ["Bold", "Italic", "Underline", "Superscript", "Subscript", "Code", "Lowercase", "Uppercase"];
+const textStylesArray = ["Bold", "Italic", "Underline", "Superscript", "Subscript", "Code", "Lowercase", "Uppercase", "Strikethrough"];
 
-const styleMap: Record<TextStyles, StyleCommand> = {
+const styleMap: Record<TextStyles, EditorCommand> = {
     "Bold" : {payload: "bold", command: FORMAT_TEXT_COMMAND},
     "Italic" : {payload: "italic", command: FORMAT_TEXT_COMMAND},
     "Underline" : {payload: "underline", command: FORMAT_TEXT_COMMAND},
@@ -24,10 +27,21 @@ const styleMap: Record<TextStyles, StyleCommand> = {
     "Subscript" : {payload: "subscript", command: FORMAT_TEXT_COMMAND},
     "Code" : {payload: "code", command: FORMAT_TEXT_COMMAND},
     "Lowercase" : {payload: "lowercase", command: FORMAT_TEXT_COMMAND},
-    "Uppercase" : {payload: "uppercase", command: FORMAT_TEXT_COMMAND}
+    "Uppercase" : {payload: "uppercase", command: FORMAT_TEXT_COMMAND},
+    "Strikethrough" : {payload: "strikethrough", command: FORMAT_TEXT_COMMAND}
 }
 
-const formatMap = {
+const alignmentMap: Record<AlignmentOptions, EditorCommand> = {
+    "Left" : {payload: "left", command: FORMAT_ELEMENT_COMMAND},
+    "Start" : {payload: "start", command: FORMAT_ELEMENT_COMMAND},
+    "Center" : {payload: "center", command: FORMAT_ELEMENT_COMMAND},
+    "Right" : {payload: "right", command: FORMAT_ELEMENT_COMMAND},
+    "End" : {payload: "end", command: FORMAT_ELEMENT_COMMAND},
+    "Justify" : {payload: "justify", command: FORMAT_ELEMENT_COMMAND}
+}
+
+
+const listTypeMap = {
     "Bulleted List" : "bullet",
     "Numbered List" : "number"
 }
@@ -153,7 +167,7 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
     })
 }
 
-function toggleStyle(editor: LexicalEditor, styleObj: {payload: string, command: LexicalCommand<string>}) {
+function executeCommand(editor: LexicalEditor, styleObj: {payload: string, command: LexicalCommand<string>}) {
     let {payload, command} = styleObj;
 
     editor.update(() => {
@@ -182,15 +196,33 @@ function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
     const coreTextStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Code"];
-    const extendedTextStyles: TextStyles[] = ["Subscript", "Superscript", "Lowercase", "Uppercase"];
+    const extendedTextStyles: TextStyles[] = ["Subscript", "Superscript", "Lowercase", "Uppercase", "Strikethrough"];
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
     const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
+    const alignmentOptions: AlignmentOptions[] = ["Left", "Start", "Center", "Right", "End", "Justify"];
 
     const [activeStyles, setActiveStyles] = useState<TextStyles[]>([]);
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
-    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+    const [extendedStylesAnchor, setExtendedStylesAnchor] = useState<null | HTMLElement>(null);
+    const [alignmentAnchor, setAlignmentAnchor] = useState<null | HTMLElement>(null);
     const [canUndo, setCanUndo] = useState<Boolean>(false);
     const [canRedo, setCanRedo] = useState<Boolean>(false);   
+
+    const dropdownStateMap: Record<ToolbarAnchors, StateAndSetter<null | HTMLElement>> = {
+    "extendedStyles" : {state: extendedStylesAnchor, setter: setExtendedStylesAnchor},
+    "alignmentOptions" : {state: alignmentAnchor, setter: setAlignmentAnchor}
+    }
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>, key: ToolbarAnchors) => {
+        let {state, setter} = dropdownStateMap[key];
+
+        if (state !== null) {
+            setter(null);
+            return;
+        }
+
+        setter(event.currentTarget);
+    }
 
     // useEffect used to enable/disable undo/redo buttons
     useEffect(() => {
@@ -218,15 +250,6 @@ function Toolbar() {
         }
     },[editor]);  
 
-    // Helper functions
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (anchor !== null) {
-            setAnchor(null);
-            return;
-        };
-        setAnchor(event.currentTarget);
-    };
-
     return(
         <div className="toolbar-container">
             {/*Undo/Redo */}
@@ -251,25 +274,24 @@ function Toolbar() {
                     key={coreTextStyle}
                     className={`style-button ${activeStyles.includes(coreTextStyle) ? "active" : ""}`}
                     onClick={() => {
-                        toggleStyle(editor, styleMap[coreTextStyle])
+                        executeCommand(editor, styleMap[coreTextStyle])
                     }}
                     >{coreTextStyle}</button>
                 ))}
 
                 {/* .map() below used to display extended styling options */}
                 <div className="extended-styling-container">
-                    <button onClick={handleClick}>BUTTON</button>
+                    <button onClick={(e) => {handleClick(e, 'extendedStyles')}}>Extra Styling</button>
                     <Dropdown
-                    anchor={anchor}
-                    open={anchor !== null}
-                    onClose={() => {setAnchor(null)}}
+                    anchor={dropdownStateMap.extendedStyles.state}
+                    open={dropdownStateMap.extendedStyles.state !== null}
+                    onClose={() => {dropdownStateMap.extendedStyles.setter(null)}}
                     > 
                         {extendedTextStyles.map(extendedTextStyle => (
                         <DropdownItem
                         text={extendedTextStyle}
-                        onClick={() => {toggleStyle(editor, styleMap[extendedTextStyle])}}
-                        // selected={activeStyles.includes(extendedTextStyle)}
-                        ></DropdownItem>
+                        onClick={() => {executeCommand(editor, styleMap[extendedTextStyle])}}
+                        />
                     ))}
 
                     </Dropdown>
@@ -289,7 +311,23 @@ function Toolbar() {
                     }}
                     >{format}</button>
                 ))}
+
                 {/*Alignment tsx*/}
+                <div className="text-alignment-container">
+                    <button onClick={(e) => {handleClick(e, 'alignmentOptions')}}>Alignment</button>
+                    <Dropdown
+                    anchor={dropdownStateMap.alignmentOptions.state}
+                    open={dropdownStateMap.alignmentOptions.state !== null}
+                    onClose={() => {dropdownStateMap.alignmentOptions.setter(null)}}
+                    >
+                        {alignmentOptions.map(alignmentOption => (
+                            <DropdownItem
+                            text={alignmentOption}
+                            onClick={() => {executeCommand(editor, alignmentMap[alignmentOption])}}
+                            />
+                        ))}
+                    </Dropdown>
+                </div>
             </div>
         </div>
 
