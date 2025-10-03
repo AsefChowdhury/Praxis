@@ -6,6 +6,7 @@ type DropdownProps = {
     children: React.ReactNode;
     open: boolean;
     onClose: () => void
+    id?: string
 };
 
 function Dropdown(props: DropdownProps) {
@@ -38,7 +39,7 @@ function Dropdown(props: DropdownProps) {
     return (
         <>
             {props.open &&
-                <div className='dropdown-container' ref={containerRef}>
+                <div className='dropdown-container' ref={containerRef} id={props.id}>
                     {props.children}
                 </div>
             }
