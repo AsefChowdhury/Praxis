@@ -3,19 +3,31 @@
     border: 0.075em solid #fff;
     height: 2em;
     align-items: center;
-
+    gap: 1em;
 }
 
 .history{
     outline: 2px solid gold;
-    margin-right: 1em;
     margin-left: 1em;
+}
+
+.fontsize-container{
+    outline: 2px solid orange;
+}
+
+.fontsize-input{
+    width: 2em;
 }
 
 .styling-options{
     outline: 2px solid violet;
-    margin-right: 1em;
+    /* margin-right: 1em; */
     display: flex;
+}
+
+.core-styling-container{
+    display: flex;
+    position: relative;
 }
 
 .extended-styling-container{
@@ -23,7 +35,7 @@
     position: relative;
 }
 
-.formatting-options{
+.formatting-options, .list-formatting-options{
     outline: 2px solid greenyellow;
     display: flex;
 }
