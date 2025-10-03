@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ListType } from "./ListFormattingHelpers";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { toggleListFormat } from "./ListFormattingHelpers";
+import type { LexicalEditor } from "lexical";
 
 type ListFormats = "Bulleted List" | "Numbered List";
 
@@ -10,8 +10,7 @@ const listTypeMap = {
     "Numbered List" : "number"
 }
 
-function ListFormatting() {
-    const [editor] = useLexicalComposerContext();
+function ListFormatting({ editor }: {editor : LexicalEditor}) {
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
     
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];

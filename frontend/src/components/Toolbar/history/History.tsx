@@ -2,10 +2,9 @@ import {useEffect, useState} from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { handleHistory } from "./HistoryHelper";
 import type { HistoryCommands } from "./HistoryHelper";
-import { CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, CAN_REDO_COMMAND } from "lexical";
+import { CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, CAN_REDO_COMMAND, type LexicalEditor } from "lexical";
 
-function History() {
-    const [editor] = useLexicalComposerContext();
+function History({ editor }: {editor: LexicalEditor}) {
     const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
     const [canUndo, setCanUndo] = useState<Boolean>(false);
     const [canRedo, setCanRedo] = useState<Boolean>(false);  
