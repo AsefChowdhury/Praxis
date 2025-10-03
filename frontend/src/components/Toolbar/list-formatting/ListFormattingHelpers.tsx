@@ -7,7 +7,7 @@ const listTagMap: Record<ListType, string> = {
     "number" : "ol"
 }
 
-export function findAnchorAndFocusNodes() {
+function findAnchorAndFocusNodes() {
     // Get the selection
     const selection = $getSelection();
 
@@ -32,12 +32,12 @@ export function findAnchorAndFocusNodes() {
     return {anchorNode, anchorParentNode, focusNode, focusParentNode};
 }
 
-export function isListType(node: LexicalNode) {
+function isListType(node: LexicalNode) {
     // Check if the given node is of type ListNode or ListItemNode
     return $isListItemNode(node) || $isListNode(node);
 }
 
-export function getListFormat(node: LexicalNode){
+function getListFormat(node: LexicalNode){
     // Check if node is a list item node
     if (!$isListItemNode(node)) return false;
 
@@ -48,7 +48,7 @@ export function getListFormat(node: LexicalNode){
     return (parentNode as ListNode).getTag();
 }
 
-export function insertList(editor: LexicalEditor, formatChoice: ListType){
+function insertList(editor: LexicalEditor, formatChoice: ListType){
     // Switch-Case used to apply specific list formartting based on formatChoice given
     switch (formatChoice) {
         case "bullet":
@@ -64,7 +64,7 @@ export function insertList(editor: LexicalEditor, formatChoice: ListType){
     }
 }
 
-export function removeList(editor: LexicalEditor) {
+function removeList(editor: LexicalEditor) {
     // Removes List with Lexical command
     editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
 }
