@@ -1,10 +1,8 @@
-import { $isRangeSelection,$getSelection, type LexicalEditor } from "lexical";
+import { $isRangeSelection,$getSelection, type LexicalEditor, $isTextNode } from "lexical";
 
-const MIN_ALLOWED_FONT_SIZE: number =  8;
-const MAX_ALLOWED_FONT_SIZE: number = 72;
+export const MIN_ALLOWED_FONT_SIZE: number =  8;
+export const MAX_ALLOWED_FONT_SIZE: number = 72;
 export const DEFAULT_FONT_SIZE: number = 12;
-const FONT_SIZE_OPTIONS: number[] = [8, 10, 12, 14, 18, 24, 36, 48, 72];
-
 
 function formatFontSize(fontSize: number){
     if ((Number.isNaN(fontSize)) || (fontSize < 1)) return;
@@ -22,13 +20,22 @@ function isValidFontSize(fontSize: number): boolean{
     return fontSize >= MIN_ALLOWED_FONT_SIZE && fontSize <= MAX_ALLOWED_FONT_SIZE;
 }
 
- export function adjustFontSize(editor: LexicalEditor, currentFontSize: number){
+export function adjustFontSize(editor: LexicalEditor, value: number){
     editor.update(() => {
         const selection = $getSelection();
         if (!$isRangeSelection(selection)) return false;
-        const style = selection.style;
-        console.log("style: ", style);
 
+        const nodes = selection.getNodes();
+        const textNodes = nodes.filter(node => $isTextNode(node));
+        if (!isValidFontSize(value)) return;
+        const normalisedValue = normaliseFontSize(value, "px");
+
+        textNodes.forEach(node => {
+            const fontsize = node.getStyle();
+            console.log("fontsize: ", fontsize);
+        })
+
+        textNodes.forEach(node => node.setStyle(`font-size: ${normalisedValue}px`))
 
     })
 }
