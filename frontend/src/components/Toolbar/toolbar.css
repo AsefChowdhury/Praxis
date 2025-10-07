@@ -13,10 +13,14 @@
 
 .fontsize-container{
     outline: 2px solid orange;
+    display: flex;
+    position: relative;
 }
 
-.fontsize-input{
+.fontsize-dropdown{
+    appearance: none;
     width: 2em;
+    text-align: center;
 }
 
 .styling-options{
