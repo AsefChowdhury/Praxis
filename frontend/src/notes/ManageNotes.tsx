@@ -3,6 +3,7 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import Toolbar from "../components/Toolbar/Toolbar";
@@ -16,6 +17,14 @@ const theme = {
         uppercase: 'editor-textUppercase',
         lowercase: 'editor-textLowercase',
         strikethrough: 'editor-textStrikethrough',
+    },
+    list: {
+        ol: 'editor-list-ol',
+        ul: 'editor-list-ul',
+        listitem: 'editor-listitem',
+        nested: {
+            listitem: 'editor-nested-listitem'
+        }
     }
 };
 
@@ -40,6 +49,7 @@ function ManageNotes() {
                 <LexicalComposer initialConfig={initialConfig}>
                     <Toolbar/>
                     <ListPlugin/>
+                    <TabIndentationPlugin/>
                     <RichTextPlugin
                         contentEditable={<ContentEditable className="note-content"/>}
                         placeholder={<div className="placeholder">Enter some text</div>}

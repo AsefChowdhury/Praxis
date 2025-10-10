@@ -50,3 +50,38 @@
 .editor-textStrikethrough{
     text-decoration: line-through;
 }
+
+.editor-listitem{
+    margin: 0.5em 2em;
+}
+
+.editor-nested-listitem{
+    list-style-type: none;
+}
+
+/*ORDERED LIST*/
+.editor-list-ol{
+    list-style-type: decimal;
+}
+
+.editor-list-ol .editor-list-ol{
+    list-style-type: lower-alpha;
+}
+
+.editor-list-ol .editor-list-ol .editor-list-ol{
+    list-style-type: lower-roman;
+}
+
+/*UNORDERED LIST*/
+
+.editor-list-ul{
+    list-style-type: disc;
+}
+
+.editor-list-ul .editor-list-ul{
+    list-style-type: circle;
+}
+
+.editor-list-ul .editor-list-ul .editor-list-ul{
+    list-style-type: square;
+}
