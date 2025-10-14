@@ -1,3 +1,4 @@
+import Highlighting from "../highlighting/Highlighting";
 import type { LexicalEditor } from "lexical";
 import { type TextStyles, styleMap, executeCommand} from "../ToolbarUtils";
 import { useState } from "react";
@@ -19,6 +20,7 @@ function CoreStyles({ editor }: {editor : LexicalEditor}) {
                 }}
                 >{coreTextStyle}</button>
             ))}
+            <Highlighting editor={editor}/>
         </div>
     )
 }

@@ -34,6 +34,10 @@
     position: relative;
 }
 
+.highlighting-container{
+    display: flex;
+}
+
 .extended-styling-container{
     display: flex;
     position: relative;
