@@ -9,6 +9,7 @@ import DropdownItem from "../../dropdown/DropdownItem";
 function Highlighting({editor} : {editor : LexicalEditor}) {
     const [highlightAnchor, setHighlightAnchor] = useState<null | HTMLElement>(null);
     const [highlightColour, setHighlightColour] = useState<string>("#FFCF56");
+    const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
     const highlightColours = [
         {hex: "#FFCF56", name: "Yellow"},
         {hex: "#EC407A", name: "Pink"},
@@ -24,7 +25,9 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
 
     return(
         <div className="highlighting-container">
-            <button className="highlight" onClick={() => executeCommand(editor, styleMap["Highlight"], highlightColour)}>Highlight</button>
+            <button className="highlight" onClick={() => {
+                executeCommand(editor, styleMap["Highlight"], highlightColour)
+                setIsHighlighted(true)}}>Highlight</button>
 
             <button onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}>Extra colours</button>
             <Dropdown
@@ -40,9 +43,15 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
                         <span className="colour-swatch" style={{backgroundColor: colour.hex}}/>
                     )}
                     text={colour.name}
-                    onClick={() => {setHighlightColour(colour.hex)
-                                    executeCommand(editor, styleMap["Highlight"], colour.hex)
-                                    dropdownStateMap.highlight.setter(null)}}
+                    onClick={() => {
+                        setHighlightColour(colour.hex)
+                        if (isHighlighted === true) {
+                            executeCommand(editor, styleMap["Highlight"], colour.hex);                            
+                        }
+                        if (colour.hex === "") {
+                            setIsHighlighted(false);                            
+                        }           
+                        dropdownStateMap.highlight.setter(null)}}
                     />
                 ))}
             </Dropdown>
