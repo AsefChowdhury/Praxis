@@ -24,7 +24,7 @@ export function createDropdownStateMap<T extends string>(map: Record<T, StateAnd
 
 export function executeCommand(editor: LexicalEditor, styleObj: {payload: string, command: LexicalCommand<string>}, highlightColour?: string) {
     let {payload, command} = styleObj;
-    const colourValue = highlightColour ?? "#FFFF00";
+    const colourValue = highlightColour ?? "#FFCF56";
 
     editor.update(() => {
         const selection = $getSelection(); // get the current selection
