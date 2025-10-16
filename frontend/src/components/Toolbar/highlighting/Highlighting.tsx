@@ -1,15 +1,16 @@
 import "./Highlighting.css";
-import cross from "../../../assets/cross.svg";
-import type { LexicalEditor } from "lexical";
 import { styleMap, executeCommand, handleClick, createDropdownStateMap} from "../ToolbarUtils";
-import { useState } from "react";
+import { isSelectionHighlighted } from "./HighlightingHelper";
+import type { LexicalEditor } from "lexical";
+import { useEffect, useState } from "react";
 import Dropdown from "../../dropdown/Dropdown";
 import DropdownItem from "../../dropdown/DropdownItem";
+import cross from "../../../assets/cross.svg";
 
 function Highlighting({editor} : {editor : LexicalEditor}) {
     const [highlightAnchor, setHighlightAnchor] = useState<null | HTMLElement>(null);
     const [highlightColour, setHighlightColour] = useState<string>("#FFCF56");
-    const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+    const [selectionIsHighlighted, setSelectionIsHighlighted] = useState<boolean>(false);
     const highlightColours = [
         {hex: "#FFCF56", name: "Yellow"},
         {hex: "#EC407A", name: "Pink"},
@@ -23,11 +24,24 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
         "highlight" : {state: highlightAnchor, setter: setHighlightAnchor}
     })
 
+    useEffect(() => {
+        return editor.registerUpdateListener(() => {
+            const isHighlighted = isSelectionHighlighted(editor);
+            setSelectionIsHighlighted(isHighlighted);
+        })
+    },[editor]);
+
+    const handleColourChange = (newColour: string) => {
+        setHighlightColour(newColour);
+        if (selectionIsHighlighted) {
+            executeCommand(editor, styleMap["Highlight"], newColour);
+        }
+        dropdownStateMap.highlight.setter(null);
+    }
+
     return(
         <div className="highlighting-container">
-            <button className="highlight" onClick={() => {
-                executeCommand(editor, styleMap["Highlight"], highlightColour)
-                setIsHighlighted(true)}}>Highlight</button>
+            <button className="highlight" onClick={() => {executeCommand(editor, styleMap["Highlight"], highlightColour)}}>Highlight</button>
 
             <button onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}>Extra colours</button>
             <Dropdown
@@ -43,15 +57,7 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
                         <span className="colour-swatch" style={{backgroundColor: colour.hex}}/>
                     )}
                     text={colour.name}
-                    onClick={() => {
-                        setHighlightColour(colour.hex)
-                        if (isHighlighted === true) {
-                            executeCommand(editor, styleMap["Highlight"], colour.hex);                            
-                        }
-                        if (colour.hex === "") {
-                            setIsHighlighted(false);                            
-                        }           
-                        dropdownStateMap.highlight.setter(null)}}
+                    onClick={() => handleColourChange(colour.hex)}
                     />
                 ))}
             </Dropdown>
