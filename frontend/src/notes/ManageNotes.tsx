@@ -1,4 +1,6 @@
 import "./note-styles/ManageNotes.css";
+import Toolbar from "../components/Toolbar/Toolbar";
+import ContentHeader from "../components/content-header/ContentHeader";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
@@ -6,8 +8,8 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
-import Toolbar from "../components/Toolbar/Toolbar";
 import { ListItemNode, ListNode } from "@lexical/list";
+import { useState } from "react";
 
 const theme = {
     text: {
@@ -33,6 +35,7 @@ function onError(error:Error): void {
 }
 
 function ManageNotes() {
+
     const initialConfig = {
         namespace: 'MyEditor',
         nodes: [
@@ -43,10 +46,14 @@ function ManageNotes() {
         onError
     }
 
+    const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
+    const [noteId, setNoteId] = useState<number | null>(null);
+
     return(
         <div className="note-container">
             <div className="note-content-container">
                 <LexicalComposer initialConfig={initialConfig}>
+                    <ContentHeader title={noteTitle} onTitleChange={setNoteTitle}/>
                     <Toolbar/>
                     <ListPlugin/>
                     <TabIndentationPlugin/>
@@ -58,6 +65,7 @@ function ManageNotes() {
                     <HistoryPlugin/>
                 </LexicalComposer>
             </div>
+            <div style={{height: '100vh', width: '1px'}}></div>
         </div>
     );
 };
