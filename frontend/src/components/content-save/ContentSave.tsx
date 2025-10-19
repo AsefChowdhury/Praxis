@@ -1,17 +1,25 @@
 import IconButton from "../icon-button/IconButton";
 import { editorToJSON, editorStateToJSON, type NotePayload} from "../../notes/NoteUtils";
-import type { LexicalEditor } from "lexical";
+import { type LexicalEditor } from "lexical";
 
-function ContentSave({ editor } : { editor : LexicalEditor}) {
+type ContentSaveProps = {
+    editor : LexicalEditor;
+    title : string;
+    id : number | null;
+    onSave: (payload: NotePayload) => void;
+}
+
+function ContentSave({ editor, title, id, onSave } : ContentSaveProps) {
 
     const handleSave = () => {
         const jsonData = editorToJSON(editor);
 
         const payload: NotePayload = {
-            title: "",
+            title: title,
             content: jsonData,
-            noteId: undefined
+            noteId: id
         }
+        onSave(payload);
     }
 
     return(

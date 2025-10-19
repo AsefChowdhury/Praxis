@@ -3,7 +3,7 @@ import type { EditorState, LexicalEditor } from "lexical";
 export interface NotePayload {
     title : string;
     content : string;
-    noteId ?: number;
+    noteId ?: number |  null;
 }
 
 
