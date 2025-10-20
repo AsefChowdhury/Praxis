@@ -52,6 +52,15 @@ function ManageNotes(props: ManageNotesProps) {
     }
 
     const handleNoteSave = (payload: NotePayload) => {
+        if (payload.noteId === null) {
+            const newId = crypto.randomUUID()
+            payload.noteId = newId;
+            localStorage.setItem('note_' + newId, JSON.stringify(payload));
+            setNoteId(payload.noteId);
+        }
+        else{
+            localStorage.setItem('note_' + payload.noteId, JSON.stringify(payload));
+        }
     }
 
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
