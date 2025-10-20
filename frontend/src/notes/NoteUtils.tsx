@@ -1,9 +1,9 @@
 import type { EditorState, LexicalEditor } from "lexical";
 
 export interface NotePayload {
-    title : string;
+    title : string,
     content : string;
-    noteId ?: number |  null;
+    noteId : string | null;
 }
 
 

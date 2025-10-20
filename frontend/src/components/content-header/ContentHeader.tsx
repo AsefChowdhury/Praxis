@@ -7,7 +7,7 @@ import { type NotePayload } from "../../notes/NoteUtils";
 type ContentHeaderProps = {
     title: string;
     onTitleChange: (newTitle: string) => void;
-    id: number | null;
+    id: string | null;
     onSave: (payload: NotePayload) => void;
 }
 

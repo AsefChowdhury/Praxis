@@ -52,12 +52,10 @@ function ManageNotes(props: ManageNotesProps) {
     }
 
     const handleNoteSave = (payload: NotePayload) => {
-        {}
-        console.log(payload)
     }
 
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
-    const [noteId, setNoteId] = useState<number | null>(null);
+    const [noteId, setNoteId] = useState<string | null>(null);
 
     return(
         <div className="note-container">

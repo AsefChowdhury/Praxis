@@ -5,7 +5,7 @@ import { type LexicalEditor } from "lexical";
 type ContentSaveProps = {
     editor : LexicalEditor;
     title : string;
-    id : number | null;
+    id : string | null;
     onSave: (payload: NotePayload) => void;
 }
 
