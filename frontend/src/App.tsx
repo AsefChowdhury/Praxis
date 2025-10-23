@@ -32,13 +32,23 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
+
+              {/* Notes */}
+              <Route path="notes">
+                <Route index element={<MyNotes />}/>
+                <Route path="create" element={<ManageNotes/>} />
+                <Route path="edit/:noteId" element={<ManageNotes/>} />
+              </Route>
+
+              {/* Flashcards */}
               <Route path="flashcards">
                 <Route index element={<MyFlashcards />} />
                 <Route path="create" element={<ManageDeck mode="create" />} />
                 <Route path="edit/:deckId" element={<ManageDeck mode="edit" />} />
               </Route>
+
+              {/* Quizzes */}
               <Route path="quizzes" element={<MyQuizzes />} />
-              <Route path="notes" element={<MyNotes />} />
             </Route>
             <Route path="flashcards/test/:deckId" element={<FlashcardTest />} />
           </Route>
