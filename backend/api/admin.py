@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import CustomUser, Deck, Flashcard
+from .models import CustomUser, Deck, Flashcard, Note
 from django.contrib.auth.admin import UserAdmin
 
 class CustomUserAdmin(UserAdmin):
@@ -21,6 +21,11 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("email",)
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'note_title', 'author')
+
 @admin.register(Deck)
 class DeckAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')   # 👈 show ID and title in list view
