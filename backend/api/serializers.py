@@ -2,8 +2,15 @@ import datetime
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
-from .models import CustomUser, Deck, Flashcard
+from .models import CustomUser, Deck, Flashcard, Note
 import jwt
+
+class NoteSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = Note
+        fields = ["id", "author", "note_title", "note_content"]
+        read_only_fields = ["author"]
 
 class FlashcardSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
