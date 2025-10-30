@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, ForgotPasswordSerializer, ResetPasswordSerializer, UserSerializer, CustomTokenObtainPairSerializer
+from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, ForgotPasswordSerializer, ResetPasswordSerializer, UserSerializer, CustomTokenObtainPairSerializer, NoteSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .models import Deck
+from .models import Deck, Note
 import threading
 User = get_user_model()
 from rest_framework.decorators import api_view, permission_classes
@@ -24,6 +24,17 @@ load_dotenv()
 
 # Create your views here.
 
+class NoteViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsAuthenticated]
+    serializer_class=NoteSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Note.objects.filter(author=user)
+    
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+    
 class DeckViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
