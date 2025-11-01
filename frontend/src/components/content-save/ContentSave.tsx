@@ -15,9 +15,9 @@ function ContentSave({ editor, title, id, onSave } : ContentSaveProps) {
         const jsonData = editorToJSON(editor);
 
         const payload: NotePayload = {
-            title: title,
-            content: jsonData,
-            noteId: id
+            id: id,
+            note_title: title,
+            note_content: jsonData,
         }
         onSave(payload);
     }
