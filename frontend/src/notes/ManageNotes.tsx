@@ -13,6 +13,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import api from "../api";
 
 type EditorUIProps = {
     noteTitle: string;
@@ -27,20 +28,22 @@ function EditorUI(props: EditorUIProps){
     const { noteId: id } = useParams();
 
     useEffect(() => {
-        if (id) {
-            const loadedNote = loadNote(id);
-
-            if (loadedNote) {
-                props.onIdChange(loadedNote.noteId);
-                props.onTitleChange(loadedNote.title);
-                editor.update(() => {
-                    const newEditorState = editor.parseEditorState(loadedNote.content);
-                    editor.setEditorState(newEditorState);
-                })
-            }
-            else{
+        const fetchNote = async () => {
+            if (id) {
+                const loadedNote = await loadNote(id);
+    
+                if (loadedNote) {
+                    props.onIdChange(loadedNote.id);
+                    props.onTitleChange(loadedNote.note_title);
+                    editor.update(() => {
+                        const newEditorState = editor.parseEditorState(loadedNote.note_content);
+                        editor.setEditorState(newEditorState);
+                    })
+                }
             }
         }
+
+        fetchNote();
 
     },[id, editor, props.onIdChange, props.onTitleChange]);
 
@@ -102,16 +105,23 @@ function ManageNotes() {
         onError
     }
 
-    const handleNoteSave = (payload: NotePayload) => {
-        if (payload.noteId === null) {
-            const newId = crypto.randomUUID()
-            payload.noteId = newId;
-            localStorage.setItem('note_' + newId, JSON.stringify(payload));
-            setNoteId(payload.noteId);
-            navigate(`/notes/edit/${newId}`), { replace: true };
-        }
-        else{
-            localStorage.setItem('note_' + payload.noteId, JSON.stringify(payload));
+    const handleNoteSave = async (payload: NotePayload) => {
+        try {
+            if (payload.id === null) {
+                const createPayload = {
+                    note_title: payload.note_title,
+                    note_content: payload.note_content
+                }
+                const response = await api.post(`api/notes/`, createPayload);
+                const newNote = response.data;
+                setNoteId(newNote.id);
+                navigate(`/notes/edit/${newNote.id}`, { replace: true });
+            }
+            else{
+                await api.put(`api/notes/${payload.id}`, payload);
+            }
+        } catch (error) {
+            console.log("Failed to save note:", error);
         }
     }
 
@@ -128,7 +138,6 @@ function ManageNotes() {
                     />
                 </LexicalComposer>
             </div>
-            <div style={{height: '100vh', width: '1px'}}></div>
         </div>
     );
 };

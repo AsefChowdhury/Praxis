@@ -1,9 +1,11 @@
 import type { EditorState, LexicalEditor } from "lexical";
+import api from "../api";
 
 export interface NotePayload {
-    title : string,
-    content : string;
-    noteId : string | null;
+    id : string | null;
+    note_title : string,
+    note_content : string;
+    author ?: number;
 }
 
 export function editorToJSON(editor : LexicalEditor) {
@@ -15,16 +17,13 @@ export function editorStateToJSON(editorState : EditorState) {
     return JSON.stringify(editorState.toJSON());
 }
 
-export function loadNote(noteId: string): NotePayload | null{
-    const data = localStorage.getItem("note_" + noteId);
-
-    if (!data) return null;
-
+export async function loadNote(noteId: string): Promise<NotePayload | null>{
     try {
-        const parsedData = JSON.parse(data);
-        return parsedData;
+        const response = await api.get(`api/notes/${noteId}`);
+        return response.data;
+        
     } catch (error) {
-        console.error("Failed to parse note data from local storage");
+        console.log("Failed to load note from API: ", error);
         return null;
     }
 }
