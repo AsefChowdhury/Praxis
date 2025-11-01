@@ -29,7 +29,7 @@ function CreationButton() {
             <Dropdown anchor={dropdownAnchor as HTMLElement} open={dropdownAnchor !== null} onClose={handleClose} >
                 <DropdownItem icon={flashcards} text='New deck' to='/flashcards/create' onClick={handleClose}/>
                 <DropdownItem icon={quizzes} text='New quiz' onClick={handleClose}/>
-                <DropdownItem icon={notes} text='New notes' onClick={handleClose}/>
+                <DropdownItem icon={notes} text='New notes' to='/notes/create' onClick={handleClose}/>
             </Dropdown>
         </div>
         
