@@ -1,6 +1,13 @@
 import "./note-styles/ManageNotes.css";
 import Toolbar from "../components/Toolbar/Toolbar";
 import ContentHeader from "../components/content-header/ContentHeader";
+import History from "../components/Toolbar/history/History";
+import Fontsize from "../components/Toolbar/fontsize/Fontsize";
+import CoreStyles from "../components/Toolbar/core-styles/CoreStyles";
+import ExtendedStyles from "../components/Toolbar/extended-styles/ExtendedStyles";
+import ListFormatting from "../components/Toolbar/list-formatting/ListFormatting";
+import AlignmentFormats from "../components/Toolbar/alignment-formats/AlignmentFormats";
+
 import { type NotePayload, loadNote } from "./NoteUtils";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -54,14 +61,28 @@ function EditorUI(props: EditorUIProps){
                 onTitleChange={props.onTitleChange} 
                 id={props.nodeId} 
                 onSave={props.onSave}/>
-            <Toolbar/>
+                
+            <Toolbar toolbarFeatures={
+                <> 
+                    <History editor={editor}/>
+                    <Fontsize editor={editor}/>
+                    <div className="styling-options">
+                        <CoreStyles editor={editor}/>
+                        <ExtendedStyles editor={editor}/>
+                    </div>
+                    <div className="formatting-options">
+                        <ListFormatting editor={editor}/>
+                        <AlignmentFormats editor={editor}/>
+                    </div>
+                </>
+            }/>
             <ListPlugin/>
             <TabIndentationPlugin/>
             <RichTextPlugin
                 contentEditable={<ContentEditable className="note-content"/>}
                 placeholder={<div className="placeholder">Enter some text</div>}
-                ErrorBoundary={LexicalErrorBoundary}
-            />
+                ErrorBoundary={LexicalErrorBoundary}/>
+                
             <HistoryPlugin/>
         </>
     )
