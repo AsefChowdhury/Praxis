@@ -7,9 +7,8 @@ type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
 
 function Textarea({variant = "outlined", className, ...props}: TextareaProps) {
   return (
-    <div className="textarea-container">
-      <textarea {...props} className={`textarea ${className ?? ''} ${variant} ${props.error ? 'error' : 'regular'}`}/>
-      {props.error && <p className="error-message">{props.error}</p>}
+    <div className={`textarea-container ${variant} ${className || ''}`}>
+      <textarea {...props} className="textarea"/>
     </div>
   )
 }
