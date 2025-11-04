@@ -55,7 +55,7 @@ function EditorUI(props: EditorUIProps){
     },[id, editor, props.onIdChange, props.onTitleChange]);
 
     return(
-        <>
+        <div className="editor-ui">
             <ContentHeader 
                 title={props.noteTitle} 
                 onTitleChange={props.onTitleChange} 
@@ -84,7 +84,7 @@ function EditorUI(props: EditorUIProps){
                 ErrorBoundary={LexicalErrorBoundary}/>
                 
             <HistoryPlugin/>
-        </>
+        </div>
     )
 }
 
@@ -136,10 +136,10 @@ function ManageNotes() {
                 const response = await api.post(`api/notes/`, createPayload);
                 const newNote = response.data;
                 setNoteId(newNote.id);
-                navigate(`/notes/edit/${newNote.id}`, { replace: true });
+                navigate(`/notes/edit/${newNote.id}/`, { replace: true });
             }
             else{
-                await api.put(`api/notes/${payload.id}`, payload);
+                await api.put(`api/notes/${payload.id}/`, payload);
             }
         } catch (error) {
             console.log("Failed to save note:", error);

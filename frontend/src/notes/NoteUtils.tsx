@@ -19,7 +19,7 @@ export function editorStateToJSON(editorState : EditorState) {
 
 export async function loadNote(noteId: string): Promise<NotePayload | null>{
     try {
-        const response = await api.get(`api/notes/${noteId}`);
+        const response = await api.get(`api/notes/${noteId}/`);
         return response.data;
         
     } catch (error) {
