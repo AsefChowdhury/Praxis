@@ -2,54 +2,7 @@
     display: flex;
     border: 0.075em solid #fff;
     height: 2em;
+    width: auto;
     align-items: center;
-    gap: 1em;
+    gap: 0.5em;
 }
-
-.history{
-    outline: 2px solid gold;
-    margin-left: 1em;
-}
-
-.fontsize-container{
-    outline: 2px solid orange;
-    display: flex;
-    position: relative;
-}
-
-.fontsize-dropdown{
-    appearance: none;
-    width: 2em;
-    text-align: center;
-}
-
-.styling-options{
-    outline: 2px solid violet;
-    /* margin-right: 1em; */
-    display: flex;
-}
-
-.core-styling-container{
-    display: flex;
-    position: relative;
-}
-
-.highlighting-container{
-    display: flex;
-}
-
-.extended-styling-container{
-    display: flex;
-    position: relative;
-}
-
-.formatting-options, .list-formatting-options{
-    outline: 2px solid greenyellow;
-    display: flex;
-}
-
-.text-alignment-container{
-    display: flex;
-    position: relative;
-}
-
