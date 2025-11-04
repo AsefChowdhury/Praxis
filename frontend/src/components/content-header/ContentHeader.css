@@ -1,0 +1,33 @@
+.header-container{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    display: flex;
+}
+
+.file-name-container{
+    width: 40em;
+    display: flex;
+    margin-right: 2em;
+}
+
+.textarea-container.note-title .textarea{
+    resize: none;
+    padding: 2px;
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.textarea-container.note-title.outlined .textarea{
+    background-color: transparent;
+    border-width: 0.1em;
+}
+
+.textarea-container.note-title.outlined:focus-within .textarea{
+    background-color: var(--accent-color);
+    border-width: 0.1em;
+}
+
+.file-operations{
+    display: flex;
+    height: 2.7em;
+}
