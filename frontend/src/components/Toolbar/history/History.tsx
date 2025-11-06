@@ -1,8 +1,14 @@
-import {useEffect, useState} from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import "./History.css"
+import React, {useEffect, useState} from "react";
 import { handleHistory } from "./HistoryHelper";
 import type { HistoryCommands } from "./HistoryHelper";
 import { CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, CAN_REDO_COMMAND, type LexicalEditor } from "lexical";
+import { Undo, Redo } from "lucide-react";
+
+const HISTORY_ICONS: Record<HistoryCommands, React.ReactNode> = {
+    "Undo": <Undo size={18} strokeWidth={3}/>,
+    "Redo": <Redo size={18} strokeWidth={3}/>
+}
 
 function History({ editor }: {editor: LexicalEditor}) {
     const historyCommands: HistoryCommands[] = ["Undo", "Redo"];
@@ -45,7 +51,7 @@ function History({ editor }: {editor: LexicalEditor}) {
                 onClick={() => {
                     handleHistory(editor, historyCommand)
                 }}
-                >{historyCommand}</button>
+                >{HISTORY_ICONS[historyCommand]}</button>
             ))}
         </div>
     )
