@@ -3,7 +3,26 @@ import { $patchStyleText} from "@lexical/selection";
 export type StateAndSetter<T> = {state: T, setter: React.Dispatch<React.SetStateAction<T>>};
 export type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase" | "Strikethrough" | "Highlight";
 export type EditorCommand = {payload: string; command: LexicalCommand<string>};
+import { TextBIcon, HighlighterIcon, TextItalicIcon, TextUnderlineIcon, TextSuperscriptIcon, TextSubscriptIcon, CodeIcon, TextStrikethroughIcon, TextAaIcon} from "@phosphor-icons/react"
+import type React from "react";
+import UppercaseIcon from "../../assets/UppercaseIcon.svg?react"
+import LowercaseIcon from "../../assets/LowercaseIcon.svg?react"
 
+export const CORE_STYLE_ICONS: Partial<Record<TextStyles, React.ReactNode>> = {
+    "Bold" : <TextBIcon size={22} weight="bold"/>,
+    "Italic": <TextItalicIcon size={22}/>,
+    "Underline": <TextUnderlineIcon size={22}/>,
+    "Code": <CodeIcon size={22}/>,
+    "Highlight": <HighlighterIcon size={22} weight="duotone"/>
+}
+
+export const EXTENDED_STYLE_ICONS: Partial<Record<TextStyles, React.FC<React.SVGProps<SVGSVGElement>>>> = {
+    "Superscript": TextSuperscriptIcon,
+    "Subscript": TextSubscriptIcon,
+    "Lowercase": LowercaseIcon,
+    "Uppercase": UppercaseIcon,
+    "Strikethrough": TextStrikethroughIcon
+}
 
 export const styleMap: Record<TextStyles, EditorCommand> = {
     "Bold" : {payload: "bold", command: FORMAT_TEXT_COMMAND},
