@@ -3,11 +3,11 @@ import React, {useEffect, useState} from "react";
 import { handleHistory } from "./HistoryHelper";
 import type { HistoryCommands } from "./HistoryHelper";
 import { CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, CAN_REDO_COMMAND, type LexicalEditor } from "lexical";
-import { Undo, Redo } from "lucide-react";
+import { ArrowCounterClockwiseIcon, ArrowClockwiseIcon } from "@phosphor-icons/react";
 
 const HISTORY_ICONS: Record<HistoryCommands, React.ReactNode> = {
-    "Undo": <Undo size={18} strokeWidth={3}/>,
-    "Redo": <Redo size={18} strokeWidth={3}/>
+    "Undo": <ArrowCounterClockwiseIcon size={22} weight="bold"/>,
+    "Redo": <ArrowClockwiseIcon size={22} weight="bold"/>
 }
 
 function History({ editor }: {editor: LexicalEditor}) {

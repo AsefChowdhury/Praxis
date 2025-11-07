@@ -2,6 +2,10 @@
     display: flex;
 }
 
+.history-button{
+    cursor: pointer;
+}
+
 .history-button svg{
     display: flex;
     justify-content: center;
