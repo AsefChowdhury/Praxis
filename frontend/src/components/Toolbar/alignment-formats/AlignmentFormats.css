@@ -1,0 +1,19 @@
+.text-alignment-container{
+    display: flex;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.alignment-button{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 9em;
+    cursor: pointer;
+}
+
+.alignment-button-icon{
+    font-size: 20px;
+    margin-right: 0.5em;
+}
