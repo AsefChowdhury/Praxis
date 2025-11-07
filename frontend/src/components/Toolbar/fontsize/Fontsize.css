@@ -1,0 +1,30 @@
+.fontsize-container{
+    display: flex;
+    position: relative;
+}
+
+.fontsize-increment, .fontsize-decrement{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.fontsize-display{
+    cursor: pointer;
+}
+
+#toolbar-dropdown{
+    right: auto;
+    left: 50%;
+    transform: translateX(-40%);
+    padding: 0.5em;
+    max-height: 50vh;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.fontsize{
+    justify-content: center;
+    padding: 0.25em 0.5em;
+}

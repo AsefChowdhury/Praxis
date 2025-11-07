@@ -1,9 +1,11 @@
+import "./Fontsize.css"
 import { DEFAULT_FONT_SIZE, MAX_ALLOWED_FONT_SIZE, MIN_ALLOWED_FONT_SIZE, ACCEPTED_FONT_SIZES, adjustFontSize, type FontSizeOptions } from "./FontsizeHelpers";
 import { handleClick, createDropdownStateMap } from "../ToolbarUtils";
 import Dropdown from "../../dropdown/Dropdown";
 import DropdownItem from "../../dropdown/DropdownItem";
 import { type LexicalEditor } from "lexical";
 import { useState, useEffect } from "react";
+import { PlusIcon, MinusIcon } from "@phosphor-icons/react";
 
 function Fontsize({ editor }: { editor: LexicalEditor}) {
     const [currentFontSize, setCurrentFontSize] = useState<number>(DEFAULT_FONT_SIZE);
@@ -41,9 +43,9 @@ function Fontsize({ editor }: { editor: LexicalEditor}) {
             <button 
             className="fontsize-decrement" 
             onClick={() => {handleAdjustment("decrease")}}
-            disabled={currentFontSize <= MIN_ALLOWED_FONT_SIZE}>-</button>
+            disabled={currentFontSize <= MIN_ALLOWED_FONT_SIZE}><MinusIcon /></button>
 
-            <button className="font-size-display" onClick={(e) => {handleClick(e, 'fontSizeOptions', dropdownStateMap)}}>{currentFontSize}</button>
+            <button className="fontsize-display" onClick={(e) => {handleClick(e, 'fontSizeOptions', dropdownStateMap)}}>{currentFontSize}</button>
             <Dropdown
             anchor={dropdownStateMap.fontSizeOptions.state}
             open={dropdownStateMap.fontSizeOptions.state !== null}
@@ -52,6 +54,7 @@ function Fontsize({ editor }: { editor: LexicalEditor}) {
             >
                 {ACCEPTED_FONT_SIZES.map((size) => (
                     <DropdownItem
+                    className="fontsize"
                     key={size}
                     text={size.toString()}
                     onClick={() => handleDropdownSelect(size)}
@@ -62,7 +65,7 @@ function Fontsize({ editor }: { editor: LexicalEditor}) {
             <button 
             className="fontsize-increment" 
             onClick={() => {handleAdjustment("increase")}}
-            disabled={currentFontSize >= MAX_ALLOWED_FONT_SIZE}>+</button>
+            disabled={currentFontSize >= MAX_ALLOWED_FONT_SIZE}><PlusIcon/></button>
         </div>        
     )
 }
