@@ -1,3 +1,11 @@
+.highlighting-container{
+    display: flex;
+}
+
+.highlight, .palette{
+    cursor: pointer;
+}
+
 .colour-swatch{
     width: 15px;
     height: 15px;

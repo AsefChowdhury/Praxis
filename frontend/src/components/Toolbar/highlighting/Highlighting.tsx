@@ -1,9 +1,10 @@
 import "./Highlighting.css";
-import { styleMap, executeCommand, handleClick, createDropdownStateMap} from "../ToolbarUtils";
+import { styleMap, executeCommand, handleClick, createDropdownStateMap, CORE_STYLE_ICONS} from "../ToolbarUtils";
 import { isSelectionHighlighted } from "./HighlightingHelper";
 import type { LexicalEditor } from "lexical";
 import { useEffect, useState } from "react";
 import Dropdown from "../../dropdown/Dropdown";
+import { PaletteIcon } from "@phosphor-icons/react";
 import DropdownItem from "../../dropdown/DropdownItem";
 import cross from "../../../assets/cross.svg";
 
@@ -41,9 +42,9 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
 
     return(
         <div className="highlighting-container">
-            <button className="highlight" onClick={() => {executeCommand(editor, styleMap["Highlight"], highlightColour)}}>Highlight</button>
+            <button className="highlight" onClick={() => {executeCommand(editor, styleMap["Highlight"], highlightColour)}}>{CORE_STYLE_ICONS["Highlight"]}</button>
 
-            <button onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}>Extra colours</button>
+            <button className="palette" onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}><PaletteIcon size={22} weight="duotone"/></button>
             <Dropdown
             anchor={dropdownStateMap.highlight.state}
             open={dropdownStateMap.highlight.state !== null}
