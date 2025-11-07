@@ -1,7 +1,7 @@
 import { editorToJSON, editorStateToJSON, type NotePayload} from "../../notes/NoteUtils";
 import { type LexicalEditor } from "lexical";
 import Button from "../button/Button";
-import { Save } from "lucide-react";
+import SaveIcon from "../../assets/SaveIcon.svg?react"
 
 type ContentSaveProps = {
     editor : LexicalEditor;
@@ -25,7 +25,7 @@ function ContentSave({ editor, title, id, onSave } : ContentSaveProps) {
 
     return(
         <Button 
-        iconLeft={Save}
+        iconLeft={SaveIcon}
         text="Save"
         variant="outlined"
         onClick={handleSave}/>
