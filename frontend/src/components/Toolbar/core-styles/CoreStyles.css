@@ -1,0 +1,8 @@
+.core-styling-container{
+    display: flex;
+    position: relative;
+}
+
+.style-button{
+    cursor: pointer;
+}

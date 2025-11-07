@@ -1,6 +1,7 @@
+import "./CoreStyles.css"
 import Highlighting from "../highlighting/Highlighting";
 import type { LexicalEditor } from "lexical";
-import { type TextStyles, styleMap, executeCommand} from "../ToolbarUtils";
+import { type TextStyles, styleMap, executeCommand, CORE_STYLE_ICONS} from "../ToolbarUtils";
 import { useState } from "react";
 
 const coreTextStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Code"];
@@ -18,7 +19,7 @@ function CoreStyles({ editor }: {editor : LexicalEditor}) {
                 onClick={() => {
                     executeCommand(editor, styleMap[coreTextStyle])
                 }}
-                >{coreTextStyle}</button>
+                >{CORE_STYLE_ICONS[coreTextStyle]}</button>
             ))}
             <Highlighting editor={editor}/>
         </div>

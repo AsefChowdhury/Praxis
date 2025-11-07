@@ -1,0 +1,12 @@
+.extended-styling-container{
+    display: flex;
+    position: relative;
+}
+
+.extra-styles{
+    cursor: pointer;
+}
+
+.extended-styles-icon svg{
+    width: 22px;
+}
