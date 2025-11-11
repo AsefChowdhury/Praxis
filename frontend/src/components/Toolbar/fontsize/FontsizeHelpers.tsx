@@ -2,7 +2,7 @@ import { $isRangeSelection,$getSelection, type LexicalEditor } from "lexical";
 import { $patchStyleText } from "@lexical/selection"
 export const MIN_ALLOWED_FONT_SIZE: number =  8;
 export const MAX_ALLOWED_FONT_SIZE: number = 72;
-export const DEFAULT_FONT_SIZE: number = 16;
+export const DEFAULT_FONT_SIZE: number = 12;
 export const ACCEPTED_FONT_SIZES: number[] = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72];
 export type FontSizeOptions = number;
 
@@ -16,6 +16,7 @@ export function adjustFontSize(editor: LexicalEditor, value: number){
     editor.update(() => {
         const selection = $getSelection();
         if (!$isRangeSelection(selection)) return;
-        $patchStyleText(selection, {"font-size": `${value}px`});
+        const pxValue = value * 1.333;
+        $patchStyleText(selection, {"font-size": `${pxValue}px`});
     })
 }
