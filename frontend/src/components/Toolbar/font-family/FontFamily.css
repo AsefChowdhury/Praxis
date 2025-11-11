@@ -1,0 +1,28 @@
+.font-family-container{
+    position: relative;
+}
+
+.font-family-container .font-button{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 6em;
+    cursor: pointer;
+}
+
+.current-font-text{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex-grow: 1;
+    text-align: left;
+}
+
+#font-dropdown{
+    right: auto;
+    left: 0;
+    max-height: 40vh;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
