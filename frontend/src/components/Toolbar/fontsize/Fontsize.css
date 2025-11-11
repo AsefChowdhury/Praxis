@@ -4,8 +4,6 @@
 }
 
 .fontsize-increment, .fontsize-decrement{
-    display: flex;
-    align-items: center;
     cursor: pointer;
 }
 

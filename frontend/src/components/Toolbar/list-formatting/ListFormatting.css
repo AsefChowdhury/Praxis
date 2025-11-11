@@ -3,7 +3,5 @@
 }
 
 .list-format-button{
-    display: flex;
-    justify-content: center;
     cursor: pointer;
 }
