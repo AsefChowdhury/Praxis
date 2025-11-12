@@ -7,11 +7,17 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: 9em;
+    width: 11em;
     cursor: pointer;
 }
 
 .alignment-button-icon{
     font-size: 20px;
     margin-right: 0.5em;
+}
+
+.alignment-dropdown-icon{
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-right: 0.25em;
 }
