@@ -30,6 +30,7 @@ function FontFamily({ editor }: { editor: LexicalEditor}) {
     },[editor]);
 
     const handleDropdownSelect = (font: FontFamilyOption) => {
+        editor.focus();
         setFontFamily(editor, font);
         setCurrentFont(font);
         dropdownStateMap.fontFamilyOptions.setter(null);
