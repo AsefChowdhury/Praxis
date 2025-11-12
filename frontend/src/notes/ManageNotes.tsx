@@ -2,6 +2,7 @@ import "./note-styles/ManageNotes.css";
 import Toolbar from "../components/Toolbar/Toolbar";
 import ContentHeader from "../components/content-header/ContentHeader";
 import History from "../components/Toolbar/history/History";
+import FontFamily from "../components/Toolbar/font-family/FontFamily";
 import Fontsize from "../components/Toolbar/fontsize/Fontsize";
 import CoreStyles from "../components/Toolbar/core-styles/CoreStyles";
 import ExtendedStyles from "../components/Toolbar/extended-styles/ExtendedStyles";
@@ -65,6 +66,7 @@ function EditorUI(props: EditorUIProps){
             <Toolbar toolbarFeatures={
                 <> 
                     <History editor={editor}/>
+                    <FontFamily editor={editor}/>
                     <Fontsize editor={editor}/>
                     <div className="styling-options">
                         <CoreStyles editor={editor}/>
