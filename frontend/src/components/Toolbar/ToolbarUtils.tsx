@@ -3,7 +3,7 @@ import { $patchStyleText} from "@lexical/selection";
 export type StateAndSetter<T> = {state: T, setter: React.Dispatch<React.SetStateAction<T>>};
 export type TextStyles = "Bold" | "Italic"| "Underline" | "Superscript" | "Subscript"| "Code" | "Lowercase" | "Uppercase" | "Strikethrough" | "Highlight";
 export type EditorCommand = {payload: string; command: LexicalCommand<string>};
-import { TextBIcon, HighlighterIcon, TextItalicIcon, TextUnderlineIcon, TextSuperscriptIcon, TextSubscriptIcon, CodeIcon, TextStrikethroughIcon, TextAaIcon} from "@phosphor-icons/react"
+import { TextBIcon, HighlighterIcon, TextItalicIcon, TextUnderlineIcon, TextSuperscriptIcon, TextSubscriptIcon, CodeIcon, TextStrikethroughIcon} from "@phosphor-icons/react"
 import type React from "react";
 import UppercaseIcon from "../../assets/UppercaseIcon.svg?react"
 import LowercaseIcon from "../../assets/LowercaseIcon.svg?react"
@@ -45,14 +45,17 @@ export function executeCommand(editor: LexicalEditor, styleObj: {payload: string
     let {payload, command} = styleObj;
     const colourValue = highlightColour ?? "#FFCF56";
 
+    editor.focus(); // forces editor to focus
+
     editor.update(() => {
-        const selection = $getSelection(); // get the current selection
-        if (!$isRangeSelection(selection)) return false;
-        
         switch(payload){
             case "highlight":
+                const selection = $getSelection(); // get the current selection
+                if (!$isRangeSelection(selection)) return false;
+
                 $patchStyleText(selection, {'background-color' : colourValue});
                 break;
+
             default:
                 editor.dispatchCommand(command, payload);
         }
