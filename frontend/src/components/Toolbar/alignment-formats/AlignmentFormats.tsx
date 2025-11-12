@@ -4,8 +4,7 @@ import DropdownItem from "../../dropdown/DropdownItem";
 import { type EditorCommand, executeCommand, handleClick, createDropdownStateMap } from "../ToolbarUtils";
 import { type LexicalEditor, $getSelection, $isElementNode, $isRangeSelection, FORMAT_ELEMENT_COMMAND } from "lexical";
 import React, { useState, useEffect } from "react";
-import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, TextAlignJustifyIcon, Car } from "@phosphor-icons/react";
-import { CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react";
+import { TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, TextAlignJustifyIcon, CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react";
 
 type AlignmentOptions = "Left" | "Center" | "Right" | "Justify" | "Start" | "End";
 
