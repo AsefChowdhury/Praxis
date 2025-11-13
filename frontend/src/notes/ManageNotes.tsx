@@ -8,6 +8,7 @@ import CoreStyles from "../components/Toolbar/core-styles/CoreStyles";
 import ExtendedStyles from "../components/Toolbar/extended-styles/ExtendedStyles";
 import ListFormatting from "../components/Toolbar/list-formatting/ListFormatting";
 import AlignmentFormats from "../components/Toolbar/alignment-formats/AlignmentFormats";
+import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveStatusDisplay";
 
 import { type NotePayload, loadNote } from "./NoteUtils";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -23,12 +24,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import api from "../api";
 
+export type saveStatusOptions = "idle" | "saving" | "saved" | "failed";
+
 type EditorUIProps = {
     noteTitle: string;
     nodeId: string | null;
     onTitleChange: (newTitle: string) => void;
     onSave: (payload: NotePayload) => void;
     onIdChange: (newId: string | null) => void;
+    saveStatus: saveStatusOptions;
 }
 
 function EditorUI(props: EditorUIProps){
@@ -68,13 +72,19 @@ function EditorUI(props: EditorUIProps){
                     <History editor={editor}/>
                     <FontFamily editor={editor}/>
                     <Fontsize editor={editor}/>
+
                     <div className="styling-options">
                         <CoreStyles editor={editor}/>
                         <ExtendedStyles editor={editor}/>
                     </div>
+
                     <div className="formatting-options">
                         <ListFormatting editor={editor}/>
                         <AlignmentFormats editor={editor}/>
+                    </div>
+
+                    <div className="toolbar-save-status">
+                        <SaveStatusDisplay saveStatus={props.saveStatus}/>
                     </div>
                 </>
             }/>
@@ -116,6 +126,7 @@ function onError(error:Error): void {
 function ManageNotes() {
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
     const [noteId, setNoteId] = useState<string | null>(null);
+    const [saveStatus, setSaveStatus] = useState<saveStatusOptions>("idle");
     const navigate = useNavigate();
 
     const initialConfig = {
@@ -129,6 +140,7 @@ function ManageNotes() {
     }
 
     const handleNoteSave = async (payload: NotePayload) => {
+        setSaveStatus("saving");
         try {
             if (payload.id === null) {
                 const createPayload = {
@@ -139,12 +151,15 @@ function ManageNotes() {
                 const newNote = response.data;
                 setNoteId(newNote.id);
                 navigate(`/notes/edit/${newNote.id}/`, { replace: true });
+                setSaveStatus("saved");
             }
             else{
                 await api.put(`api/notes/${payload.id}/`, payload);
+                setSaveStatus("saved");
             }
         } catch (error) {
             console.log("Failed to save note:", error);
+            setSaveStatus("failed");
         }
     }
 
@@ -158,6 +173,7 @@ function ManageNotes() {
                         onTitleChange={setNoteTitle}
                         onIdChange={setNoteId}
                         onSave={handleNoteSave}
+                        saveStatus={saveStatus}
                     />
                 </LexicalComposer>
             </div>

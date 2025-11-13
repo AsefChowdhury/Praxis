@@ -1,0 +1,14 @@
+.save-status-container {
+    display: flex;
+    align-items: center;
+}
+
+.save-status-saving, .save-status-saved, .save-status-failed{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.save-status-icon{
+    margin-right: 0.5em;
+}
