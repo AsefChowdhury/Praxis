@@ -5,9 +5,10 @@ import { ClockIcon, CheckIcon, XCircleIcon } from "@phosphor-icons/react";
 
 type SaveStatusDisplayProps = {
     saveStatus: saveStatusOptions;
+    lastSaved: Date | null;
 }
 
-function SaveStatusDisplay({ saveStatus } : SaveStatusDisplayProps) {
+function SaveStatusDisplay({ saveStatus, lastSaved } : SaveStatusDisplayProps) {
 
     const renderStatus = () => {
         switch (saveStatus) {
@@ -34,6 +35,15 @@ function SaveStatusDisplay({ saveStatus } : SaveStatusDisplayProps) {
 
             case "idle":
             default:
+                if(lastSaved){
+                    return(
+                        <div className="save-status-idle">
+                            <span style={{color: '#888', fontSize: '0.9em'}}>
+                                Last saved at {lastSaved.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                        </div>
+                    )
+                }
                 return null;
         }
     }

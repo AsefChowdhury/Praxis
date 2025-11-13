@@ -9,6 +9,7 @@ import ExtendedStyles from "../components/Toolbar/extended-styles/ExtendedStyles
 import ListFormatting from "../components/Toolbar/list-formatting/ListFormatting";
 import AlignmentFormats from "../components/Toolbar/alignment-formats/AlignmentFormats";
 import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveStatusDisplay";
+import AutoSavePlugin from "../components/plugins/AutoSavePlugin";
 
 import { type NotePayload, loadNote } from "./NoteUtils";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -33,6 +34,7 @@ type EditorUIProps = {
     onSave: (payload: NotePayload) => void;
     onIdChange: (newId: string | null) => void;
     saveStatus: saveStatusOptions;
+    lastSaved: Date | null;
 }
 
 function EditorUI(props: EditorUIProps){
@@ -84,7 +86,7 @@ function EditorUI(props: EditorUIProps){
                     </div>
 
                     <div className="toolbar-save-status">
-                        <SaveStatusDisplay saveStatus={props.saveStatus}/>
+                        <SaveStatusDisplay saveStatus={props.saveStatus} lastSaved={props.lastSaved}/>
                     </div>
                 </>
             }/>
@@ -93,8 +95,13 @@ function EditorUI(props: EditorUIProps){
             <RichTextPlugin
                 contentEditable={<ContentEditable className="note-content"/>}
                 placeholder={<div className="placeholder">Enter some text</div>}
-                ErrorBoundary={LexicalErrorBoundary}/>
-                
+                ErrorBoundary={LexicalErrorBoundary}
+            />
+            <AutoSavePlugin
+                onSave={props.onSave}
+                noteId={props.nodeId}
+                noteTitle={props.noteTitle}
+            />    
             <HistoryPlugin/>
         </div>
     )
@@ -127,6 +134,7 @@ function ManageNotes() {
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
     const [noteId, setNoteId] = useState<string | null>(null);
     const [saveStatus, setSaveStatus] = useState<saveStatusOptions>("idle");
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const navigate = useNavigate();
 
     const initialConfig = {
@@ -141,22 +149,37 @@ function ManageNotes() {
 
     const handleNoteSave = async (payload: NotePayload) => {
         setSaveStatus("saving");
+        const minWait = new Promise(resolve => setTimeout(resolve, 1000));
+
         try {
-            if (payload.id === null) {
+            let request;
+
+            if(payload.id === null){
                 const createPayload = {
                     note_title: payload.note_title,
                     note_content: payload.note_content
                 }
-                const response = await api.post(`api/notes/`, createPayload);
-                const newNote = response.data;
-                setNoteId(newNote.id);
-                navigate(`/notes/edit/${newNote.id}/`, { replace: true });
-                setSaveStatus("saved");
+
+                request = api.post(`api/notes/`, createPayload);
             }
             else{
-                await api.put(`api/notes/${payload.id}/`, payload);
-                setSaveStatus("saved");
+                request = api.put(`api/notes/${payload.id}/`, payload);
             }
+
+            const [response] = await Promise.all([request, minWait]);
+
+            if(payload.id === null){
+                const newNote = response.data;
+                setNoteId(newNote.id);
+                navigate(`/notes/edit/${newNote.id}/`, {replace: true});
+            }
+
+            setSaveStatus("saved");
+            setLastSaved(new Date());
+
+            setTimeout(() => {
+                setSaveStatus("idle");
+            }, 2000);
         } catch (error) {
             console.log("Failed to save note:", error);
             setSaveStatus("failed");
@@ -174,6 +197,7 @@ function ManageNotes() {
                         onIdChange={setNoteId}
                         onSave={handleNoteSave}
                         saveStatus={saveStatus}
+                        lastSaved={lastSaved}
                     />
                 </LexicalComposer>
             </div>
