@@ -34,7 +34,7 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
             safetyTimerRef.current = null;
         }
 
-        return editor.registerUpdateListener(({ editorState}) => {
+        const unregisterListener = editor.registerUpdateListener(({ editorState }) => {
             latestDocRef.current = editorStateToJSON(editorState);
 
             if(debounceTimerRef.current){
@@ -50,7 +50,14 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
                     performSave();
                 }, 60000);
             }
-        });
+        })
+
+        return () => {
+            unregisterListener();
+
+            if(debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+            if(safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+        }
 
     },[editor, onSave, noteId, noteTitle]);
 
