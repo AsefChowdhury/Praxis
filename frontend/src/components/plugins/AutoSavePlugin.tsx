@@ -1,11 +1,12 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useEffect, useRef } from "react";
-import {type  NotePayload, editorStateToJSON } from "../../notes/NoteUtils";
+import { type NotePayload, editorStateToJSON } from "../../notes/NoteUtils";
+import { type SavePayload } from "../../notes/ManageNotes";
 
 type AutoSavePluginProps = {
     noteId: string | null;
     noteTitle: string;
-    onSave: (payload: NotePayload) => void;
+    onSave: (payload: SavePayload) => void;
 }
 
 function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
@@ -19,13 +20,23 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
             let content = latestDocRef.current;
             if(content === null) return;
 
-            let newNotePayload: NotePayload = {
-                id: noteId,
-                note_title: noteTitle,
-                note_content: content
+            let payloadToSend: SavePayload;
+
+            if (noteId === null) {
+                payloadToSend = {
+                    id: null,
+                    note_title: noteTitle,
+                    note_content: content
+                }
+            }
+            else{
+                payloadToSend = {
+                    id: noteId,
+                    note_content: content
+                }
             }
 
-            onSave(newNotePayload);
+            onSave(payloadToSend);
 
             if(debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
             if(safetyTimerRef.current) clearTimeout(safetyTimerRef.current)

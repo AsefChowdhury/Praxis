@@ -20,18 +20,19 @@ import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import api from "../api";
 
 export type saveStatusOptions = "idle" | "saving" | "saved" | "failed";
+export type SavePayload = Partial<NotePayload> & {id: string | null};
 
 type EditorUIProps = {
     noteTitle: string;
     nodeId: string | null;
     onTitleChange: (newTitle: string) => void;
-    onSave: (payload: NotePayload) => void;
+    onSave: (payload: SavePayload) => void;
     onIdChange: (newId: string | null) => void;
     saveStatus: saveStatusOptions;
     lastSaved: Date | null;
@@ -147,7 +148,7 @@ function ManageNotes() {
         onError
     }
 
-    const handleNoteSave = async (payload: NotePayload) => {
+    const handleNoteSave = useCallback(async (payload: SavePayload) => {
         setSaveStatus("saving");
         const minWait = new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -163,7 +164,14 @@ function ManageNotes() {
                 request = api.post(`api/notes/`, createPayload);
             }
             else{
-                request = api.put(`api/notes/${payload.id}/`, payload);
+                const { id, ...updateData} = payload;
+
+                if(Object.keys(updateData).length === 0){
+                    setSaveStatus("idle");
+                    return;
+                }
+
+                request = api.patch(`api/notes/${payload.id}/`, updateData);
             }
 
             const [response] = await Promise.all([request, minWait]);
@@ -184,7 +192,7 @@ function ManageNotes() {
             console.log("Failed to save note:", error);
             setSaveStatus("failed");
         }
-    }
+    },[navigate]);
 
     return(
         <div className="note-container">
