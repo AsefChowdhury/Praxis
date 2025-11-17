@@ -31,3 +31,31 @@
     display: flex;
     height: 2.7em;
 }
+
+/* Mobile responsiveness*/
+
+@media (max-width: 767px){
+    .header-container{
+        outline: 1px solid greenyellow;
+        gap: 0.5em;
+    }
+
+    .file-name-container{
+        margin-right: 0;
+        outline: 1px solid red;
+        width: auto;
+        flex-grow: 1;
+    }
+
+    .file-operations{
+        display: flex;
+        justify-content: flex-end;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .file-operations .button-container{
+        outline: 1px solid orange;
+        width: auto;
+    }
+}

@@ -46,7 +46,7 @@ function ContentHeader({ title, onTitleChange, id, onSave} : ContentHeaderProps)
                 maxLength={100}/>
             </div>
             <div className="file-operations">
-                <ContentSave editor={editor} title={title} id={id} onSave={onSave}/>
+                <ContentSave editor={editor} title={title} id={id} onSave={onSave} className="content-save-button"/>
             </div>
         </div>
     )
