@@ -8,9 +8,10 @@ type ContentSaveProps = {
     title : string;
     id : string | null;
     onSave: (payload: NotePayload) => void;
+    className ?: string
 }
 
-function ContentSave({ editor, title, id, onSave } : ContentSaveProps) {
+function ContentSave({ editor, title, id, onSave, className } : ContentSaveProps) {
 
     const handleSave = () => {
         const jsonData = editorToJSON(editor);
@@ -28,7 +29,9 @@ function ContentSave({ editor, title, id, onSave } : ContentSaveProps) {
         iconLeft={SaveIcon}
         text="Save"
         variant="outlined"
-        onClick={handleSave}/>
+        onClick={handleSave}
+        className={className}
+        />
     )
 }
 
