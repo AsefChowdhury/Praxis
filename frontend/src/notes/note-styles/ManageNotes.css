@@ -1,27 +1,38 @@
-.note-container{
-    outline: 2px solid red;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .note-content-container{
     position: relative;
-    /* outline: 2px solid red; */
 }
 
 .note-content{
-    height: 35em;
-    width: 50em;
+    height: 28em;
     border: 0.075em solid #fff;
-    padding: 0 1em;
+    padding: 0.5em 1em;
+    
+    
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.note-content p{
+    margin: 0;
 }
 
 .placeholder{
     position: absolute;
-    top: 3em;
+    top: 8.125em;
     left: 1em;
+}
+
+.editor-ui{
+    width: 100%;
+}
+
+.styling-options{
+    display: flex;
+}
+
+.formatting-options{
+    display: flex;
 }
 
 

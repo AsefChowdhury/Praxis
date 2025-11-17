@@ -9,6 +9,7 @@
 
 .fontsize-display{
     cursor: pointer;
+    width: 2.5em;
 }
 
 #toolbar-dropdown{

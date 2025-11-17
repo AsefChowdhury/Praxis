@@ -1,8 +1,21 @@
 .toolbar-container{
     display: flex;
     border: 0.075em solid #fff;
-    height: 2em;
-    width: auto;
+    width: 100%;
     align-items: center;
     gap: 0.5em;
+    box-sizing: border-box;
+    padding: 0.25em;
+}
+
+.toolbar-container button{
+    height: 2.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar-save-status{
+    flex-grow: 1;
+    margin-right: 0.15em;
 }
