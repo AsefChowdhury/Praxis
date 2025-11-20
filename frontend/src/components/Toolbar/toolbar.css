@@ -3,9 +3,8 @@
     border: 0.075em solid #fff;
     width: 100%;
     align-items: center;
-    gap: 0.5em;
     box-sizing: border-box;
-    padding: 0.25em;
+    padding: 0.3em;
 }
 
 .toolbar-container button{
@@ -18,5 +17,4 @@
 .toolbar-save-status{
     flex-grow: 0;
     flex-shrink: 0;
-    margin-right: 0.15em;
 }

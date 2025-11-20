@@ -1,6 +1,7 @@
 .save-status-container {
     display: flex;
     align-items: center;
+    min-width: 9em;
 }
 
 .save-status-saving, .save-status-saved, .save-status-failed{
