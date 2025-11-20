@@ -11,3 +11,7 @@
     height: 15px;
     border: 1px solid white;
 }
+
+#palette-dropdown{
+    width: 7em;
+}

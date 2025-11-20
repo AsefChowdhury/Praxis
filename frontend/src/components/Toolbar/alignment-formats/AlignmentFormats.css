@@ -1,6 +1,5 @@
 .text-alignment-container{
     position: relative;
-
 }
 
 .text-alignment-container .alignment-button{
@@ -20,4 +19,8 @@
     margin-left: auto;
     flex-shrink: 0;
     padding-right: 0.25em;
+}
+
+#alignment-dropdown{
+    width: 8em;
 }

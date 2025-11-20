@@ -46,6 +46,7 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
 
             <button className="palette" onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}><PaletteIcon size={22} weight="duotone"/></button>
             <Dropdown
+            id="palette-dropdown"
             anchor={dropdownStateMap.highlight.state}
             open={dropdownStateMap.highlight.state !== null}
             onClose={() => {dropdownStateMap.highlight.setter(null)}}

@@ -20,6 +20,7 @@ function ExtendedStyles({ editor }: {editor: LexicalEditor}) {
                 <DotsThreeIcon size={24} weight="bold"/>
             </button>
             <Dropdown
+            id="extended-styles-dropdown"
             anchor={dropdownStateMap.extendedStyles.state}
             open={dropdownStateMap.extendedStyles.state !== null}
             onClose={() => {dropdownStateMap.extendedStyles.setter(null)}}
