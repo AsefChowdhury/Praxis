@@ -26,3 +26,11 @@
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
 }
+
+@media (max-width: 767px){
+
+    #font-dropdown{
+        max-height: 20vh;
+        overflow-y: scroll;
+    }
+}
