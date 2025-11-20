@@ -50,7 +50,7 @@ function Fontsize({ editor }: { editor: LexicalEditor}) {
             anchor={dropdownStateMap.fontSizeOptions.state}
             open={dropdownStateMap.fontSizeOptions.state !== null}
             onClose={() => {dropdownStateMap.fontSizeOptions.setter(null)}}
-            id="toolbar-dropdown"
+            id="fontsize-dropdown"
             >
                 {ACCEPTED_FONT_SIZES.map((size) => (
                     <DropdownItem
