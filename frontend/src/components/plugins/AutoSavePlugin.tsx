@@ -13,12 +13,27 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
     const [editor] = useLexicalComposerContext();
     const debounceTimerRef = useRef<number | null>(null);
     const safetyTimerRef = useRef<number | null>(null);
+    const lastSavedContentRef = useRef<string | null>(null);
+    const lastSavedTitleRef = useRef<string | null>(null);
     let latestDocRef = useRef<string | null>(null);
 
     useEffect(() => {
         const performSave = () => {
             let content = latestDocRef.current;
             if(content === null) return;
+
+            const contentHadChanged = content !== lastSavedContentRef.current;
+            const titleHasChanged = noteTitle !== lastSavedTitleRef.current;
+
+            if(!contentHadChanged && !titleHasChanged){
+                if(debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+                if(safetyTimerRef.current) clearTimeout(safetyTimerRef.current)
+                
+                debounceTimerRef.current = null;
+                safetyTimerRef.current = null; 
+
+                return;
+            }
 
             let payloadToSend: SavePayload;
 
@@ -34,9 +49,15 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
                     id: noteId,
                     note_content: content
                 }
+                if (titleHasChanged) {
+                    payloadToSend = {...payloadToSend, note_title: noteTitle};
+                }
             }
 
             onSave(payloadToSend);
+
+            lastSavedContentRef.current = content;
+            lastSavedTitleRef.current = noteTitle;
 
             if(debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
             if(safetyTimerRef.current) clearTimeout(safetyTimerRef.current)
