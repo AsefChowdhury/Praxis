@@ -68,22 +68,26 @@ function EditorUI(props: EditorUIProps){
                 title={props.noteTitle} 
                 onTitleChange={props.onTitleChange} 
                 id={props.nodeId} 
-                onSave={props.onSave}/>
+                onSave={props.onSave}
+                />
                 
             <Toolbar toolbarFeatures={
                 <> 
-                    <History editor={editor}/>
-                    <FontFamily editor={editor}/>
-                    <Fontsize editor={editor}/>
+                    <div className="scrollable-toolbar">
+                        <History editor={editor}/>
+                        <FontFamily editor={editor}/>
+                        <Fontsize editor={editor}/>
 
-                    <div className="styling-options">
-                        <CoreStyles editor={editor}/>
-                        <ExtendedStyles editor={editor}/>
-                    </div>
+                        <div className="styling-options">
+                            <CoreStyles editor={editor}/>
+                            <ExtendedStyles editor={editor}/>
+                        </div>
 
-                    <div className="formatting-options">
-                        <ListFormatting editor={editor}/>
-                        <AlignmentFormats editor={editor}/>
+                        <div className="formatting-options">
+                            <ListFormatting editor={editor}/>
+                            <AlignmentFormats editor={editor}/>
+                        </div>
+
                     </div>
 
                     <div className="toolbar-save-status">

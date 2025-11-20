@@ -2,11 +2,17 @@
     position: relative;
 }
 
+.scrollable-toolbar{
+    display: flex;
+    gap: 0.5em;
+    flex-grow: 1;
+    min-width: 0;
+}
+
 .note-content{
     height: 28em;
     border: 0.075em solid #fff;
     padding: 0.5em 1em;
-    
     
     overflow-y: scroll;
     scrollbar-width: thin;
@@ -15,7 +21,7 @@
 
 .note-content p{
     margin: 0;
-}
+}   
 
 .placeholder{
     position: absolute;
@@ -95,4 +101,30 @@
 
 .editor-list-ul .editor-list-ul .editor-list-ul{
     list-style-type: square;
+}
+
+/* Mobile Responsiveness */
+
+@media (max-width: 767px){
+
+    .note-content{
+        height: 42em;
+    }
+
+    .scrollable-toolbar{
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        gap: 0.5em;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .toolbar-save-status{
+        display: flex;
+        align-items: center;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding-left: 0.5em;
+    }
 }

@@ -6,7 +6,6 @@
 .save-status-saving, .save-status-saved, .save-status-failed{
     display: flex;
     align-items: center;
-    width: 100%;
 }
 
 .save-status-icon{
