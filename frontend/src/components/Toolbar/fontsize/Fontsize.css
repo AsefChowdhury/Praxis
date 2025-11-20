@@ -15,7 +15,7 @@
 #toolbar-dropdown{
     right: auto;
     left: 50%;
-    transform: translateX(-40%);
+    transform: translateX(-15%);
     padding: 0.5em;
     max-height: 50vh;
     overflow-y: scroll;
