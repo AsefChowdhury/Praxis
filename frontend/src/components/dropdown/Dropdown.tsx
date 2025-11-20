@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import './dropdown-styles/Dropdown.css'
 
 type DropdownProps = {
@@ -11,6 +12,8 @@ type DropdownProps = {
 
 function Dropdown(props: DropdownProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [ready, setReady] = useState(false);
+    const [position, setPosition] = useState<{top: number, left: number}>({top: 0, left: 0});
     
     useEffect(() => {
         if(!props.open) return;
@@ -35,15 +38,32 @@ function Dropdown(props: DropdownProps) {
         };
         
     }, [props.open]);
+
+    useEffect(() => {
+        if(!props.open || !props.anchor){
+            setReady(false);
+            return;
+        };
+
+        const rect = props.anchor.getBoundingClientRect();
+        setPosition({top: rect.bottom + window.scrollY + 8, left: rect.left + window.scrollX});
+
+        setReady(true);
+
+    },[props.open, props.anchor]);
     
-    return (
-        <>
-            {props.open &&
-                <div className='dropdown-container' ref={containerRef} id={props.id}>
-                    {props.children}
-                </div>
-            }
-        </>
+    if (!props.open || !ready) return null;
+
+    return ReactDOM.createPortal(
+        <div 
+        className='dropdown-container' 
+        ref={containerRef} 
+        id={props.id}
+        style={{position: 'fixed', top: position.top, left: position.left}}
+        >
+            {props.children}
+        </div>,
+        document.body
     )
 }
 
