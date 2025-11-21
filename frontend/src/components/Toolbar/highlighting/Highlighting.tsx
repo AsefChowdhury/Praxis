@@ -25,13 +25,6 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
         "highlight" : {state: highlightAnchor, setter: setHighlightAnchor}
     })
 
-    useEffect(() => {
-        return editor.registerUpdateListener(() => {
-            const isHighlighted = isSelectionHighlighted(editor);
-            setSelectionIsHighlighted(isHighlighted);
-        })
-    },[editor]);
-
     const handleColourChange = (newColour: string) => {
         setHighlightColour(newColour);
         if (selectionIsHighlighted) {
@@ -40,9 +33,20 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
         dropdownStateMap.highlight.setter(null);
     }
 
+    useEffect(() => {
+        const updateToolbar = () => {
+            const isHighlighted = isSelectionHighlighted(editor);
+            setSelectionIsHighlighted(isHighlighted);
+        }
+
+        return editor.registerUpdateListener(updateToolbar);
+    },[editor]);
+
     return(
         <div className="highlighting-container">
-            <button className="highlight" onClick={() => {executeCommand(editor, styleMap["Highlight"], highlightColour)}}>{CORE_STYLE_ICONS["Highlight"]}</button>
+            <button 
+            className={`highlight ${selectionIsHighlighted ? 'active' : ''}`} 
+            onClick={() => {executeCommand(editor, styleMap["Highlight"], highlightColour)}}>{CORE_STYLE_ICONS["Highlight"]}</button>
 
             <button className="palette" onClick={(e) => {handleClick(e, 'highlight', dropdownStateMap)}}><PaletteIcon size={22} weight="duotone"/></button>
             <Dropdown

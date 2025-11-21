@@ -5,3 +5,8 @@
 .list-format-button{
     cursor: pointer;
 }
+
+.list-format-button.active{
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 0.10em;  
+}

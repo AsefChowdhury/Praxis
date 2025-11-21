@@ -1,10 +1,8 @@
 import "./ListFormatting.css"
-import { useState } from "react";
-import { type ListType, toggleListFormat} from "./ListFormattingHelpers";
-import type { LexicalEditor } from "lexical";
+import { useEffect, useState } from "react";
+import { type ListType, type ListFormats, toggleListFormat, getActiveListFormat} from "./ListFormattingHelpers";
+import { type LexicalEditor } from "lexical";
 import { ListBulletsIcon, ListNumbersIcon } from "@phosphor-icons/react";
-
-type ListFormats = "Bulleted List" | "Numbered List";
 
 const listTypeMap = {
     "Bulleted List" : "bullet",
@@ -17,16 +15,24 @@ const LIST_ICON: Record<ListFormats, React.ReactNode> = {
 }
 
 function ListFormatting({ editor }: {editor : LexicalEditor}) {
-    const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
-    
+    const [activeFormat, setActiveFormat] = useState<ListFormats | null>(null);
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
+
+    useEffect(() => {
+        const updateToolbar = () => {
+            const activeFormat = getActiveListFormat(editor);
+            setActiveFormat(activeFormat);
+        }
+        
+        return editor.registerUpdateListener(updateToolbar)
+    },[editor])
 
     return(
         <div className="list-formatting-options">
             {listFormats.map(listFormat => (
                 <button
                 key={listFormat}
-                className={`list-format-button ${activeFormat.includes(listFormat) ? "active" : ""}`}
+                className={`list-format-button ${activeFormat === listFormat ? "active" : ""}`}
                 onClick={() => {
                     toggleListFormat(editor, listTypeMap[listFormat] as ListType)
                 }}
