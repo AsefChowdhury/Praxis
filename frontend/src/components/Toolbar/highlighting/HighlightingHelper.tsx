@@ -1,4 +1,5 @@
-import { $getSelection, $isRangeSelection, $isTextNode, type LexicalEditor } from "lexical";
+import { $getSelection, $isRangeSelection, type LexicalEditor } from "lexical";
+import { $getSelectionStyleValueForProperty} from "@lexical/selection";
 
 export const isSelectionHighlighted = (editor: LexicalEditor): boolean => {
     let isHighlighted = false;
@@ -11,9 +12,8 @@ export const isSelectionHighlighted = (editor: LexicalEditor): boolean => {
             return;
         }
 
-        isHighlighted = selection.getNodes().some(node => 
-            $isTextNode(node) && node.getStyle().includes("background-color")
-        );
+        const backgroundColour = $getSelectionStyleValueForProperty(selection, "background-color", "");
+        isHighlighted = backgroundColour !== "";
     });
     return isHighlighted;
 };
