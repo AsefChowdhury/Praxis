@@ -2,9 +2,14 @@ import { $getSelection, $isRangeSelection, $getNodeByKey, type LexicalNode, type
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
 export type ListType = "bullet" | "number";
+export type ListFormats = "Bulleted List" | "Numbered List";
 const listTagMap: Record<ListType, string> = {
     "bullet" : "ul",
     "number" : "ol"
+}
+const tagToFormat: Record<string, ListFormats | null> = {
+    ul: "Bulleted List",
+    ol: "Numbered List"
 }
 
 function findAnchorAndFocusNodes() {
@@ -112,4 +117,23 @@ export function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
             insertList(editor, formatChoice);
         }
     })
+}
+
+export function getActiveListFormat(editor: LexicalEditor): ListFormats | null {
+    let activeFormat: ListFormats | null = null;
+
+    editor.getEditorState().read(() => {
+        const selection = $getSelection();
+        if(!$isRangeSelection(selection)) return;
+
+        const selectedNode = selection.getNodes()[0];
+        const listNode = selectedNode.getParents().find($isListNode) as ListNode | undefined;
+
+        if (listNode) {
+            const listTag = listNode.getTag();
+            activeFormat = tagToFormat[listTag] ?? null;
+        };
+    });
+
+    return activeFormat;
 }
