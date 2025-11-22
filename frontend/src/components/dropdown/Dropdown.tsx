@@ -8,9 +8,11 @@ type DropdownProps = {
     open: boolean;
     onClose: () => void
     id?: string
+    usePortal?: boolean;
 };
 
 function Dropdown(props: DropdownProps) {
+    const { usePortal = false } = props;
     const containerRef = useRef<HTMLDivElement>(null);
     const [ready, setReady] = useState(false);
     const [position, setPosition] = useState<{top: number, left: number}>({top: 0, left: 0});
@@ -40,6 +42,11 @@ function Dropdown(props: DropdownProps) {
     }, [props.open]);
 
     useEffect(() => {
+        if(!usePortal){
+            setReady(true);
+            return;
+        }
+
         if(!props.open || !props.anchor){
             setReady(false);
             return;
@@ -54,17 +61,27 @@ function Dropdown(props: DropdownProps) {
     
     if (!props.open || !ready) return null;
 
-    return ReactDOM.createPortal(
-        <div 
-        className='dropdown-container' 
-        ref={containerRef} 
-        id={props.id}
-        style={{position: 'fixed', top: position.top, left: position.left}}
-        >
+    if(usePortal){
+        return ReactDOM.createPortal(
+            <div 
+            className='dropdown-container' 
+            ref={containerRef} 
+            id={props.id}
+            style={{position: 'fixed', top: position.top, left: position.left}}
+            >
+                {props.children}
+            </div>,
+            document.body
+        )
+    }
+
+    return (
+        <div className='dropdown-container' ref={containerRef} id={props.id}>
             {props.children}
-        </div>,
-        document.body
+        </div>
     )
+
+
 }
 
 export default Dropdown
