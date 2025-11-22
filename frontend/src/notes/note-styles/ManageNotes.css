@@ -105,10 +105,36 @@
 
 /* Mobile Responsiveness */
 
+/*Mobile (0px-767px) */
 @media (max-width: 767px){
 
     .note-content{
         height: 42em;
+    }
+
+    .scrollable-toolbar{
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        gap: 0.5em;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .toolbar-save-status{
+        display: flex;
+        align-items: center;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding-left: 0.5em;
+    }
+}
+
+/*Tablet to laptop (768px-1024px)*/
+@media (min-width: 768px) and (max-width:1024px){
+
+    .note-content{
+        height: 40em;
     }
 
     .scrollable-toolbar{
