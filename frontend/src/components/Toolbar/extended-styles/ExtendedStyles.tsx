@@ -24,6 +24,7 @@ function ExtendedStyles({ editor }: {editor: LexicalEditor}) {
             anchor={dropdownStateMap.extendedStyles.state}
             open={dropdownStateMap.extendedStyles.state !== null}
             onClose={() => {dropdownStateMap.extendedStyles.setter(null)}}
+            usePortal={true}
             > 
                 {extendedTextStyles.map(extendedTextStyle => (
                 <DropdownItem

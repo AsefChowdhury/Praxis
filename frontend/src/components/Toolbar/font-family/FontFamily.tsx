@@ -49,6 +49,7 @@ function FontFamily({ editor }: { editor: LexicalEditor}) {
             open={dropdownStateMap.fontFamilyOptions.state !== null}
             onClose={() => {dropdownStateMap.fontFamilyOptions.setter(null)}}
             id="font-dropdown"
+            usePortal={true}
             >
                 {AVAILABLE_FONTS.map((font) => (
                     <DropdownItem

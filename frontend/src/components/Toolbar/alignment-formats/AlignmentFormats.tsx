@@ -73,6 +73,7 @@ function AlignmentFormats({ editor }: {editor: LexicalEditor}) {
             open={dropdownStateMap.alignmentOptions.state !== null}
             onClose={() => {dropdownStateMap.alignmentOptions.setter(null)}}
             id="alignment-dropdown"
+            usePortal={true}
             >
                 {alignmentOptions.map(alignmentOption => (
                     <DropdownItem

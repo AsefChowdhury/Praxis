@@ -54,6 +54,7 @@ function Highlighting({editor} : {editor : LexicalEditor}) {
             anchor={dropdownStateMap.highlight.state}
             open={dropdownStateMap.highlight.state !== null}
             onClose={() => {dropdownStateMap.highlight.setter(null)}}
+            usePortal={true}
             >
                 {highlightColours.map((colour) => (
                     <DropdownItem
