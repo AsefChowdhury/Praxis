@@ -1,19 +1,22 @@
 import "./ContentHeader.css";
 import Textarea from "../textarea/Textarea";
 import ContentSave from "../content-save/ContentSave";
+import ContentModeSwitch from "../content-mode-switch/ContentModeSwitch";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { type SavePayload } from "../../notes/ManageNotes";
-import { useRef } from "react";
+import { type SavePayload, type ManageNotesMode } from "../../notes/ManageNotes";
+import { useRef} from "react";
 
 type ContentHeaderProps = {
     title: string;
     onTitleChange: (newTitle: string) => void;
     id: string | null;
     onSave: (payload: SavePayload) => void;
+    onModeChange: (payload: ManageNotesMode) => void;
+    currentMode: ManageNotesMode;
 }
 
 
-function ContentHeader({ title, onTitleChange, id, onSave} : ContentHeaderProps) {
+function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, currentMode} : ContentHeaderProps) {
     const [editor] = useLexicalComposerContext();
     const originalTitleRef = useRef(title);
 
@@ -33,7 +36,6 @@ function ContentHeader({ title, onTitleChange, id, onSave} : ContentHeaderProps)
         }
     }
 
-
     return(
         <div className="header-container">
             <div className="file-name-container">
@@ -46,7 +48,8 @@ function ContentHeader({ title, onTitleChange, id, onSave} : ContentHeaderProps)
                 maxLength={100}/>
             </div>
             <div className="file-operations">
-                <ContentSave editor={editor} title={title} id={id} onSave={onSave} className="content-save-button"/>
+                <ContentSave editor={editor} title={title} id={id} onSave={onSave} className="content-buttons"/>
+                <ContentModeSwitch onModeChange={onModeChange} className="content-buttons" currentMode={currentMode}/>
             </div>
         </div>
     )

@@ -37,7 +37,8 @@ function App() {
               <Route path="notes">
                 <Route index element={<MyNotes />}/>
                 <Route path="create" element={<ManageNotes/>} />
-                <Route path="edit/:noteId" element={<ManageNotes/>} />
+                <Route path="edit/:noteId" element={<ManageNotes mode="Edit"/>} />
+                <Route path="preview/:noteId" element={<ManageNotes mode="Preview"/>} />
               </Route>
 
               {/* Flashcards */}

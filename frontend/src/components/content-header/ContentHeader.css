@@ -7,7 +7,7 @@
 .file-name-container{
     width: 40em;
     display: flex;
-    margin-right: 2em;
+    margin-right: 0.5em;
 }
 
 .textarea-container.note-title .textarea{
@@ -30,19 +30,26 @@
 .file-operations{
     display: flex;
     height: 2.7em;
+    gap: 1em;
 }
+
+.content-buttons{
+    min-width: 6.5em;
+}
+
+/* .file-operations .button-container .content-buttons{
+    width: 6.5em;
+} */
 
 /* Mobile responsiveness*/
 
 @media (max-width: 767px){
     .header-container{
-        outline: 1px solid greenyellow;
         gap: 0.5em;
     }
 
     .file-name-container{
         margin-right: 0;
-        outline: 1px solid red;
         width: auto;
         flex-grow: 1;
     }
@@ -55,7 +62,7 @@
     }
 
     .file-operations .button-container{
-        outline: 1px solid orange;
         width: auto;
     }
+
 }

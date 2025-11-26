@@ -27,6 +27,7 @@ import api from "../api";
 
 export type saveStatusOptions = "idle" | "saving" | "saved" | "failed";
 export type SavePayload = Partial<NotePayload> & {id: string | null};
+export type ManageNotesMode = "Preview" | "Edit";
 
 type EditorUIProps = {
     noteTitle: string;
@@ -36,6 +37,8 @@ type EditorUIProps = {
     onIdChange: (newId: string | null) => void;
     saveStatus: saveStatusOptions;
     lastSaved: Date | null;
+    noteMode: "Preview" | "Edit"
+    onModeChange: (mode: "Preview" | "Edit") => void
 }
 
 function EditorUI(props: EditorUIProps){
@@ -62,6 +65,10 @@ function EditorUI(props: EditorUIProps){
 
     },[id, editor, props.onIdChange, props.onTitleChange]);
 
+    useEffect(() => {
+        editor.setEditable(props.noteMode === "Edit");
+    },[editor, props.noteMode]);
+
     return(
         <div className="editor-ui">
             <ContentHeader 
@@ -69,36 +76,42 @@ function EditorUI(props: EditorUIProps){
                 onTitleChange={props.onTitleChange} 
                 id={props.nodeId} 
                 onSave={props.onSave}
+                onModeChange={props.onModeChange}
+                currentMode={props.noteMode}
                 />
-                
-            <Toolbar toolbarFeatures={
-                <> 
-                    <div className="scrollable-toolbar">
-                        <History editor={editor}/>
-                        <FontFamily editor={editor}/>
-                        <Fontsize editor={editor}/>
-
-                        <div className="styling-options">
-                            <CoreStyles editor={editor}/>
-                            <ExtendedStyles editor={editor}/>
+            
+            {props.noteMode === "Edit" && (
+                <Toolbar toolbarFeatures={
+                    <> 
+                        <div className="scrollable-toolbar">
+                            <History editor={editor}/>
+                            <FontFamily editor={editor}/>
+                            <Fontsize editor={editor}/>
+    
+                            <div className="styling-options">
+                                <CoreStyles editor={editor}/>
+                                <ExtendedStyles editor={editor}/>
+                            </div>
+    
+                            <div className="formatting-options">
+                                <ListFormatting editor={editor}/>
+                                <AlignmentFormats editor={editor}/>
+                            </div>
+    
                         </div>
-
-                        <div className="formatting-options">
-                            <ListFormatting editor={editor}/>
-                            <AlignmentFormats editor={editor}/>
+    
+                        <div className="toolbar-save-status">
+                            <SaveStatusDisplay saveStatus={props.saveStatus} lastSaved={props.lastSaved}/>
                         </div>
-
-                    </div>
-
-                    <div className="toolbar-save-status">
-                        <SaveStatusDisplay saveStatus={props.saveStatus} lastSaved={props.lastSaved}/>
-                    </div>
-                </>
-            }/>
+                    </>
+                }/>
+            )}
+            
             <ListPlugin/>
             <TabIndentationPlugin/>
+
             <RichTextPlugin
-                contentEditable={<ContentEditable className="note-content"/>}
+                contentEditable={<ContentEditable className={`note-content ${props.noteMode === "Preview" ? "read-only" : ""}`}/>}
                 placeholder={<div className="placeholder">Enter some text</div>}
                 ErrorBoundary={LexicalErrorBoundary}
             />
@@ -135,11 +148,12 @@ function onError(error:Error): void {
     console.error(error);
 }
 
-function ManageNotes() {
+function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
     const [noteId, setNoteId] = useState<string | null>(null);
     const [saveStatus, setSaveStatus] = useState<saveStatusOptions>("idle");
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
+    const [noteMode, setNoteMode] = useState<"Preview" | "Edit">(mode);
     const navigate = useNavigate();
 
     const initialConfig = {
@@ -149,7 +163,8 @@ function ManageNotes() {
             ListItemNode
         ],
         theme,
-        onError
+        onError,
+        editable: true
     }
 
     const handleNoteSave = useCallback(async (payload: SavePayload) => {
@@ -198,6 +213,18 @@ function ManageNotes() {
         }
     },[navigate]);
 
+    const handleModeSwitch = (newMode: ManageNotesMode) => {
+        setNoteMode(newMode);
+
+        if (noteId) {
+            navigate(`/notes/${newMode.toLowerCase()}/${noteId}/`, {replace: true});
+        }
+    }
+
+    useEffect(() => {
+        setNoteMode(mode);
+    }, [mode]);
+
     return(
         <div className="note-container">
             <div className="note-content-container">
@@ -210,6 +237,8 @@ function ManageNotes() {
                         onSave={handleNoteSave}
                         saveStatus={saveStatus}
                         lastSaved={lastSaved}
+                        noteMode={noteMode}
+                        onModeChange={handleModeSwitch}
                     />
                 </LexicalComposer>
             </div>
