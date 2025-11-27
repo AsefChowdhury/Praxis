@@ -78,6 +78,8 @@ function EditorUI(props: EditorUIProps){
                 onSave={props.onSave}
                 onModeChange={props.onModeChange}
                 currentMode={props.noteMode}
+                saveStatus={props.saveStatus}
+                lastSaved={props.lastSaved}
                 />
             
             {props.noteMode === "Edit" && (

@@ -2,8 +2,10 @@ import "./ContentHeader.css";
 import Textarea from "../textarea/Textarea";
 import ContentSave from "../content-save/ContentSave";
 import ContentModeSwitch from "../content-mode-switch/ContentModeSwitch";
+import SaveStatusDisplay from "../Toolbar/save-status-display/SaveStatusDisplay";
+
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { type SavePayload, type ManageNotesMode } from "../../notes/ManageNotes";
+import { type SavePayload, type ManageNotesMode, type saveStatusOptions } from "../../notes/ManageNotes";
 import { useRef} from "react";
 
 type ContentHeaderProps = {
@@ -13,10 +15,12 @@ type ContentHeaderProps = {
     onSave: (payload: SavePayload) => void;
     onModeChange: (payload: ManageNotesMode) => void;
     currentMode: ManageNotesMode;
+    saveStatus: saveStatusOptions;
+    lastSaved: Date | null;
 }
 
 
-function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, currentMode} : ContentHeaderProps) {
+function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, currentMode, saveStatus, lastSaved} : ContentHeaderProps) {
     const [editor] = useLexicalComposerContext();
     const originalTitleRef = useRef(title);
 
@@ -47,9 +51,18 @@ function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, current
                 onBlur={handleTitleBlur}
                 maxLength={100}/>
             </div>
-            <div className="file-operations">
-                <ContentSave editor={editor} title={title} id={id} onSave={onSave} className="content-buttons"/>
-                <ContentModeSwitch onModeChange={onModeChange} className="content-buttons" currentMode={currentMode}/>
+
+            <div className="file-operations-wrapper">
+                <div className="file-operations">
+                    {currentMode === "Edit" && (
+                        <ContentSave editor={editor} title={title} id={id} onSave={onSave} className="content-buttons"/>
+                    )}
+                    <ContentModeSwitch onModeChange={onModeChange} className="content-buttons" currentMode={currentMode}/>
+                </div>
+
+                {currentMode === "Preview" && (
+                    <SaveStatusDisplay saveStatus={saveStatus} lastSaved={lastSaved}/>
+                )}
             </div>
         </div>
     )
