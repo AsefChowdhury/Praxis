@@ -1,6 +1,7 @@
 .mode-container{
     display: flex;
     gap: 0.25em;
+    position: relative;
 }
 
 
