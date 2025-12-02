@@ -6,6 +6,7 @@ export interface NotePayload {
     note_title : string,
     note_content : string;
     author ?: number;
+    updated_at : string
 }
 
 export function editorToJSON(editor : LexicalEditor) {

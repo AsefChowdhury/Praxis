@@ -10,6 +10,7 @@ type NoteCardProps = {
     preview : string,
     id : number,
     onDelete : (id: number) => void,
+    lastModified : Date
 }
 
 function NoteCard(props: NoteCardProps){

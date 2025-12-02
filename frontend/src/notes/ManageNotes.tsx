@@ -204,7 +204,7 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
             }
 
             setSaveStatus("saved");
-            setLastSaved(new Date());
+            setLastSaved(new Date(response.data.updated_at));
 
             setTimeout(() => {
                 setSaveStatus("idle");
