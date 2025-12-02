@@ -30,7 +30,7 @@ class NoteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return Note.objects.filter(author=user)
+        return Note.objects.filter(author=user).order_by('-updated_at')
     
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

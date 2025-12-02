@@ -9,7 +9,7 @@ class NoteSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     class Meta:
         model = Note
-        fields = ["id", "author", "note_title", "note_content"]
+        fields = ["id", "author", "note_title", "note_content", "updated_at"]
         read_only_fields = ["author"]
 
 class FlashcardSerializer(serializers.ModelSerializer):
