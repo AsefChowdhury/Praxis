@@ -1,0 +1,20 @@
+.note-list-container{
+    outline: 1px solid red;
+    margin-top: 5vh;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.recent-notes{
+    outline: 1px solid greenyellow;
+    height: 30vh;
+}
+
+.user-notes{
+    outline: 1px solid orange;
+    height: 45vh;
+}
+
+/* NoteCard CSS */
