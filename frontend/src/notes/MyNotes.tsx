@@ -1,5 +1,5 @@
 import "./note-styles/MyNotes.css";
-import { type NotePayload } from "./NoteUtils";
+import { extractPlainTextFromJSON, type NotePayload } from "./NoteUtils";
 import IconButton from "../components/icon-button/IconButton";
 import Button from "../components/button/Button";
 import Modal from "../components/modal/Modal";
@@ -48,6 +48,7 @@ function NoteCard(props: NoteCardProps){
 }
 
 const createPreview = (content: string | null | undefined, contentType: "title" | "note content"): string => {
+    let textContent = content ? content.trim() : '';
     
     let maxLength: number;
     if (contentType === "title") {
@@ -55,9 +56,8 @@ const createPreview = (content: string | null | undefined, contentType: "title" 
     }
     else{
         maxLength = 100;
+        textContent = extractPlainTextFromJSON(textContent);
     }
-
-    const textContent = content ? content.trim() : '';
 
     if (textContent.length === 0) {
         if (contentType === "note content") {
@@ -66,8 +66,8 @@ const createPreview = (content: string | null | undefined, contentType: "title" 
         return '';
     }
 
-
-    const previewText = textContent.substring(0, maxLength);
+    let previewText = textContent.substring(0, maxLength);
+    previewText = previewText.trim()
     return previewText + (textContent.length > maxLength ? '...' : '');
 }
 
