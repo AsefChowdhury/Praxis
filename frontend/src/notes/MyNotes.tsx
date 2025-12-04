@@ -1,13 +1,15 @@
 import "./note-styles/MyNotes.css";
+import { DotsThreeVerticalIcon, PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 import { extractPlainTextFromJSON, type NotePayload } from "./NoteUtils";
-import IconButton from "../components/icon-button/IconButton";
-import Button from "../components/button/Button";
-import Modal from "../components/modal/Modal";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import DropdownItem from "../components/dropdown/DropdownItem";
+import Dropdown from "../components/dropdown/Dropdown";
+import Modal from "../components/modal/Modal";
 import Card from "../components/card/Card";
 import api from "../api";
 
-import { PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 
 type NoteCardProps = {
     title : string,
@@ -17,7 +19,14 @@ type NoteCardProps = {
     lastModified : Date
 }
 
+type dropdownModes = "Preview" | "Edit" | "Delete";
+
+
 function NoteCard(props: NoteCardProps){
+    const modes: dropdownModes[] = ["Preview", "Edit", "Delete"];
+    const [dropdownAnchor, setDropdownAnchor] = useState<HTMLElement | null>(null);
+    const navigate = useNavigate();
+
     const formattedDate = props.lastModified.toLocaleString("en-GB", {
         year : 'numeric',
         month : 'short',
@@ -26,9 +35,58 @@ function NoteCard(props: NoteCardProps){
         minute : '2-digit'
     });
 
+    const handleDropdownToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setDropdownAnchor((prev) => (prev ? null : e.currentTarget));
+    }
+
+    const handleModeSelect = (mode: dropdownModes) => {
+        setDropdownAnchor(null);
+
+        switch (mode) {
+            case "Preview":
+                navigate(`/notes/preview/${props.id}/`);
+                break;
+
+            case "Edit":
+                navigate(`/notes/edit/${props.id}/`);
+                break;
+            
+            case "Delete":
+                props.onDelete(props.id);
+                break;
+
+            default:
+                break;
+        }
+    }
+
     return(
         <Card className="note-card-container">
-            <p>{props.title}</p>
+            <div className="note-card-header">
+                <div className="note-card-title">
+                    {props.title}
+                </div>
+                
+                <div className="note-card-actions">
+                    <button className="note-card-actions-icon" onClick={handleDropdownToggle}>
+                        <DotsThreeVerticalIcon size={20} weight="bold"/>
+                    </button>
+                    <Dropdown
+                        anchor={dropdownAnchor}
+                        open={dropdownAnchor !== null}
+                        onClose={() => setDropdownAnchor(null)}
+                        id="note-card-dropdown"
+                    >
+                        {modes.map(mode => (
+                            <DropdownItem
+                                key={mode}
+                                text={mode}
+                                onClick={() => handleModeSelect(mode)}
+                            />
+                        ))}
+                    </Dropdown>
+                </div>
+            </div>
 
             <div className="note-content-preview">
                 {props.preview}
@@ -36,12 +94,6 @@ function NoteCard(props: NoteCardProps){
 
             <div className="note-last-modified">
                 Last Modified: {formattedDate}
-            </div>
-            
-            <div className="note-actions">
-                <Button text="Preview" variant="outlined" to={`/notes/preview/${props.id}/`}/>
-                <IconButton icon={PencilLineIcon} to={`/notes/edit/${props.id}/`} tooltip="Edit Note"/>
-                <IconButton icon={TrashIcon} onClick={() => {props.onDelete(props.id)}} tooltip="Delete Note"/>
             </div>
         </Card>
     )
@@ -75,7 +127,8 @@ function MyNotes() {
     const [notes, setNotes] = useState<NotePayload[]>([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState({id: 0, title: undefined});
-    const recentNotesList = [...notes].slice(0, 1);
+    const recentNotesList = [...notes].slice(0, 5);
+    const allNotesList = [...notes];
 
     const getNotes = async () => {
         await api
@@ -100,7 +153,7 @@ function MyNotes() {
 
             <div className="recent-notes">
                 <div className="recent-notes-header">
-                    <h1>Recent Notes</h1>
+                    <h2>Recent Notes</h2>
                 </div>
 
                 <div className="recent-notes-list">
@@ -120,11 +173,20 @@ function MyNotes() {
 
             <div className="user-notes">
                 <div className="user-notes-header">
-                    <h1>My Notes</h1>
+                    <h2>My Notes</h2>
                 </div>
 
                 <div className="user-notes-list">
-
+                    {allNotesList.map(note => (
+                        <NoteCard
+                            key={note.id as string}
+                            id={Number(note.id)}
+                            title={createPreview(note.note_title, "title")}
+                            preview={createPreview(note.note_content, "note content")}
+                            lastModified={new Date(note.updated_at || 0)}
+                            onDelete={handleDelete}
+                        />
+                    ))}
                 </div>
             </div>
 
