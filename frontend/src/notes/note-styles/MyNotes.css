@@ -1,6 +1,5 @@
 .note-list-container{
     margin-top: 5vh;
-    height: 80vh;
     display: flex;
     flex-direction: column;
     gap: 2em;
@@ -8,6 +7,17 @@
 
 .recent-notes, .user-notes{
     background-color: rgba(255, 255, 255, 0.04);
+}
+
+.recent-notes-header, .user-notes-header{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+}
+
+.toggle-icon{
+    transition: transform 0.75s ease;
 }
 
 .recent-notes-header, .recent-notes-header h2, .user-notes-header, .user-notes-header h2 {
@@ -23,7 +33,6 @@
     scrollbar-color: #555 transparent;
     height: 35vh;
     gap: 1em;
-    
 }
 
 .user-notes-list{
@@ -33,13 +42,32 @@
     gap: 1em;
 }
 
+.accordion-panel{
+    max-height: 900px;
+    overflow: hidden;
+    transition: max-height 1s ease;
+}
+
+.collapsed .accordion-panel{
+    max-height: 0;
+}
+
+.expanded{
+    height: 75vh;
+}
+
+.recent-notes.collapsed .toggle-icon, .user-notes.collapsed .toggle-icon{
+    transform: rotate(180deg);
+}
+
 /* NoteCard CSS */
 
 .note-card-container{
     flex-direction: column;
     padding: 0.75em;
-    height: 30vh;
-    width: 15vw;
+    min-height: 200px;
+    height: auto;
+    width: 250px;
     flex-shrink: 0;
     justify-content: space-between;
     cursor: pointer;
@@ -82,7 +110,8 @@
 }
 
 #note-card-dropdown{
-    transform: translateY(-10%);
+    width: 5em;
+    transform: translateX(-60px) translateY(-20px);
 }
 
 .note-content-preview{
@@ -91,5 +120,72 @@
     font-size: small;
     padding: 0.5em;
     border: 2px solid rgba(255, 255, 255, 0.2);
+    overflow-wrap: break-word;
 }
 
+.desktop-only{
+    display: block;
+}
+
+@media (max-width: 767px) {
+
+    .desktop-only{
+        display: none;
+    }
+
+    .note-list-container{
+        gap: 1em;
+    }
+
+    .recent-notes-list{
+        height: 30vh;
+    }
+
+    .accordion-panel{
+        overflow: hidden;
+    }
+
+    .user-notes{
+        height: fit-content;
+    }
+
+    .user-notes-mobile-scroll{
+        max-height: 75vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #555 transparent;
+    }
+
+    .user-notes-list{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-notes-list .note-card-container{
+        width: 90%;
+        height: auto;
+        margin: 0.5em 0;
+        justify-content: flex-start;
+    }
+
+    .user-notes-list .note-content-preview{
+        width: 95%;
+        height: auto;
+        min-height: 100px;
+        font-size: 1em;
+        margin-top: 2em;
+    }
+
+    .recent-notes-list .note-content-preview{
+        width: 95%;
+        height: auto;
+        min-height: 150px;
+        margin-top: 2em;
+    }
+
+    .note-card-container{
+        width: 50vw;
+        height: 25vh;
+        justify-content: flex-start;
+    }
+}

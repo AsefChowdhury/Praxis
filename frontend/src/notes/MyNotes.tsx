@@ -1,6 +1,7 @@
 import "./note-styles/MyNotes.css";
 import { DotsThreeVerticalIcon, PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
 import { extractPlainTextFromJSON, type NotePayload } from "./NoteUtils";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -19,11 +20,11 @@ type NoteCardProps = {
     lastModified : Date
 }
 
-type dropdownModes = "Preview" | "Edit" | "Delete";
+type dropdownModes = "Delete";
 
 
 function NoteCard(props: NoteCardProps){
-    const modes: dropdownModes[] = ["Preview", "Edit", "Delete"];
+    const modes: dropdownModes[] = ["Delete"];
     const [dropdownAnchor, setDropdownAnchor] = useState<HTMLElement | null>(null);
     const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ function NoteCard(props: NoteCardProps){
     });
 
     const handleDropdownToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
         setDropdownAnchor((prev) => (prev ? null : e.currentTarget));
     }
 
@@ -43,14 +45,6 @@ function NoteCard(props: NoteCardProps){
         setDropdownAnchor(null);
 
         switch (mode) {
-            case "Preview":
-                navigate(`/notes/preview/${props.id}/`);
-                break;
-
-            case "Edit":
-                navigate(`/notes/edit/${props.id}/`);
-                break;
-            
             case "Delete":
                 props.onDelete(props.id);
                 break;
@@ -61,14 +55,16 @@ function NoteCard(props: NoteCardProps){
     }
 
     return(
-        <Card className="note-card-container">
+        <Card className="note-card-container" onClick={() => navigate(`/notes/preview/${props.id}/`)}>
             <div className="note-card-header">
                 <div className="note-card-title">
                     {props.title}
                 </div>
                 
                 <div className="note-card-actions">
-                    <button className="note-card-actions-icon" onClick={handleDropdownToggle}>
+                    <button 
+                        className="note-card-actions-icon" 
+                        onClick={handleDropdownToggle}>
                         <DotsThreeVerticalIcon size={20} weight="bold"/>
                     </button>
                     <Dropdown
@@ -76,6 +72,7 @@ function NoteCard(props: NoteCardProps){
                         open={dropdownAnchor !== null}
                         onClose={() => setDropdownAnchor(null)}
                         id="note-card-dropdown"
+                        usePortal={true}
                     >
                         {modes.map(mode => (
                             <DropdownItem
@@ -92,7 +89,7 @@ function NoteCard(props: NoteCardProps){
                 {props.preview}
             </div>
 
-            <div className="note-last-modified">
+            <div className="note-last-modified desktop-only">
                 Last Modified: {formattedDate}
             </div>
         </Card>
@@ -127,6 +124,10 @@ function MyNotes() {
     const [notes, setNotes] = useState<NotePayload[]>([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState({id: 0, title: undefined});
+    const [activeSelection, setActiveSelection] = useState<'Recent' | 'User' | null>(null);
+
+    const recentClass = activeSelection === 'User' ? 'collapsed' : '';
+    const userClass = activeSelection === 'Recent' ? 'collapsed' : '';
     const recentNotesList = [...notes].slice(0, 5);
     const allNotesList = [...notes];
 
@@ -144,50 +145,66 @@ function MyNotes() {
         getNotes();
     };
 
+    const handleSelection = (selection: 'Recent' | 'User') => {
+        setActiveSelection(prev => (prev === selection ? null : selection));
+    };
+
     useEffect(() => {
         getNotes();
     }, []);
 
+
     return (
         <div className="note-list-container">
 
-            <div className="recent-notes">
-                <div className="recent-notes-header">
+            <div className={`recent-notes ${recentClass}`}>
+                <div className="recent-notes-header" onClick={() => handleSelection('Recent')}>
                     <h2>Recent Notes</h2>
+                    <CaretDownIcon className="toggle-icon" size={20}/>
                 </div>
 
-                <div className="recent-notes-list">
-                    {recentNotesList.map(note => (
-                        <NoteCard
-                            key={note.id as string}
-                            id={Number(note.id)}
-                            title={createPreview(note.note_title, "title")}
-                            preview={createPreview(note.note_content, "note content")}
-                            lastModified={new Date(note.updated_at || 0)}
-                            onDelete={handleDelete}
-                        />
-                    ))}
+                <div className="accordion-panel">
+                    <div className="recent-notes-list">
+                        {recentNotesList.map(note => (
+                            <NoteCard
+                                key={note.id as string}
+                                id={Number(note.id)}
+                                title={createPreview(note.note_title, "title")}
+                                preview={createPreview(note.note_content, "note content")}
+                                lastModified={new Date(note.updated_at || 0)}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    </div>
                 </div>
 
             </div>
 
-            <div className="user-notes">
-                <div className="user-notes-header">
+            <div className={`user-notes ${userClass}`}>
+                <div className="user-notes-header" onClick={() => handleSelection('User')}>
                     <h2>My Notes</h2>
+                    <CaretDownIcon className="toggle-icon" size={20}/>
                 </div>
 
-                <div className="user-notes-list">
-                    {allNotesList.map(note => (
-                        <NoteCard
-                            key={note.id as string}
-                            id={Number(note.id)}
-                            title={createPreview(note.note_title, "title")}
-                            preview={createPreview(note.note_content, "note content")}
-                            lastModified={new Date(note.updated_at || 0)}
-                            onDelete={handleDelete}
-                        />
-                    ))}
+                <div className="accordion-panel">
+                    <div className="user-notes-mobile-scroll">
+
+                        <div className="user-notes-list">
+                            {allNotesList.map(note => (
+                                <NoteCard
+                                    key={note.id as string}
+                                    id={Number(note.id)}
+                                    title={createPreview(note.note_title, "title")}
+                                    preview={createPreview(note.note_content, "note content")}
+                                    lastModified={new Date(note.updated_at || 0)}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
 
         </div>
