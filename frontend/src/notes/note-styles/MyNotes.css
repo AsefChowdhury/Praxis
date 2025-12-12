@@ -1,12 +1,14 @@
 .note-list-container{
-    margin-top: 5vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2em;
+    box-sizing: border-box;
 }
 
 .recent-notes, .user-notes{
     background-color: rgba(255, 255, 255, 0.04);
+    width: 100%;
 }
 
 .recent-notes-header, .user-notes-header{
@@ -20,7 +22,7 @@
     transition: transform 0.75s ease;
 }
 
-.recent-notes-header, .recent-notes-header h2, .user-notes-header, .user-notes-header h2 {
+.recent-notes-header h2, .user-notes-header h2 {
     padding: 0;
     margin: 0;
 }
@@ -31,19 +33,23 @@
     overflow-x: scroll;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
-    height: 35vh;
     gap: 1em;
+    box-sizing: border-box;
 }
 
 .user-notes-list{
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
     padding: 0.5em;
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
+    height: 35em;
 }
 
 .accordion-panel{
-    max-height: 900px;
+    max-height: 90em;
     overflow: hidden;
     transition: max-height 1s ease;
 }
@@ -53,7 +59,7 @@
 }
 
 .expanded{
-    height: 75vh;
+    height: 20em;
 }
 
 .recent-notes.collapsed .toggle-icon, .user-notes.collapsed .toggle-icon{
@@ -63,14 +69,14 @@
 /* NoteCard CSS */
 
 .note-card-container{
+    display: flex;
     flex-direction: column;
-    padding: 0.75em;
-    min-height: 200px;
-    height: auto;
-    width: 250px;
-    flex-shrink: 0;
-    justify-content: space-between;
+    height: 15em;
+    min-width: 14em;
+    width: 14em;
     cursor: pointer;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .note-card-container:hover{
@@ -79,9 +85,13 @@
 
 .note-card-header{
     display: flex;
-    width: 100%;
     justify-content: space-between;
+    width: 100%;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    padding-top: 0.5em;
 }
 
 .note-card-title{
@@ -115,77 +125,66 @@
 }
 
 .note-content-preview{
-    height: 15vh;
-    width: 14vw;
+    height: 100%;
+    width: 100%;
     font-size: small;
-    padding: 0.5em;
-    border: 2px solid rgba(255, 255, 255, 0.2);
     overflow-wrap: break-word;
+    box-sizing: border-box;
+    padding: 0.5em;
 }
 
-.desktop-only{
+.note-last-modified{
+    font-size: 14px;
     display: block;
+    box-sizing: border-box;
+    padding: 0.5em;
 }
 
 @media (max-width: 767px) {
 
-    .desktop-only{
+    .note-last-modified{
         display: none;
     }
 
-    .note-list-container{
-        gap: 1em;
+    .recent-notes-mobile-scroll{
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #555 transparent;
     }
-
-    .recent-notes-list{
-        height: 30vh;
-    }
-
+    
     .accordion-panel{
         overflow: hidden;
     }
 
-    .user-notes{
-        height: fit-content;
+    .recent-notes-list, .user-notes-list{
+        box-sizing: border-box;
+        padding: 1em;
+        height: 25em;
     }
 
+    .recent-notes-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .user-notes-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+    
     .user-notes-mobile-scroll{
-        max-height: 75vh;
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: #555 transparent;
     }
 
-    .user-notes-list{
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .user-notes-list .note-card-container{
-        width: 90%;
-        height: auto;
-        margin: 0.5em 0;
-        justify-content: flex-start;
-    }
-
-    .user-notes-list .note-content-preview{
-        width: 95%;
-        height: auto;
-        min-height: 100px;
-        font-size: 1em;
-        margin-top: 2em;
-    }
-
-    .recent-notes-list .note-content-preview{
-        width: 95%;
-        height: auto;
-        min-height: 150px;
-        margin-top: 2em;
-    }
-
     .note-card-container{
-        width: 50vw;
-        height: 25vh;
-        justify-content: flex-start;
+        min-height: 10em;
+        min-width: 90%;
+        max-width: 90%;
     }
 }

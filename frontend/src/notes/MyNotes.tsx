@@ -164,17 +164,20 @@ function MyNotes() {
                 </div>
 
                 <div className="accordion-panel">
-                    <div className="recent-notes-list">
-                        {recentNotesList.map(note => (
-                            <NoteCard
-                                key={note.id as string}
-                                id={Number(note.id)}
-                                title={createPreview(note.note_title, "title")}
-                                preview={createPreview(note.note_content, "note content")}
-                                lastModified={new Date(note.updated_at || 0)}
-                                onDelete={handleDelete}
-                            />
-                        ))}
+                    <div className="recent-notes-mobile-scroll">
+                        <div className="recent-notes-list">
+                            {recentNotesList.map(note => (
+                                <NoteCard
+                                    key={note.id as string}
+                                    id={Number(note.id)}
+                                    title={createPreview(note.note_title, "title")}
+                                    preview={createPreview(note.note_content, "note content")}
+                                    lastModified={new Date(note.updated_at || 0)}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
+                        </div>
+
                     </div>
                 </div>
 
