@@ -1,5 +1,6 @@
-.note-content-container{
+.note-content-container {
     position: relative;
+    min-width: 0;
 }
 
 .scrollable-toolbar{
@@ -10,13 +11,16 @@
 }
 
 .note-content{
-    height: 28em;
     border: 0.075em solid #fff;
     padding: 0.5em 1em;
     
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
+}
+
+.note-content:focus-within{
+    background-color: #242424;
 }
 
 .note-content p{
@@ -29,8 +33,9 @@
     left: 1em;
 }
 
-.editor-ui{
+.editor-ui {
     width: 100%;
+    min-width: 0;
 }
 
 .styling-options{
