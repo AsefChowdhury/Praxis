@@ -8,6 +8,7 @@
         flex-direction: row;
         height: 100%;
         width: 100%;
+        min-width: 0;
     }
     
     .page-content{
@@ -16,6 +17,8 @@
         padding-left: 1em;
         padding-right: 1em;
         margin: auto;
+        min-width: 0;
+        overflow: hidden;
     }
     
     .navbar-right {

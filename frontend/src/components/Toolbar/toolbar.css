@@ -1,10 +1,16 @@
-.toolbar-container{
+.toolbar-container {
     display: flex;
     border: 0.075em solid #fff;
     width: 100%;
+    min-width: 0;
     align-items: center;
     box-sizing: border-box;
     padding: 0.3em;
+    overflow: hidden;
+}
+
+.toolbar-container:focus-within{
+    background-color: #242424;
 }
 
 .toolbar-container button{
