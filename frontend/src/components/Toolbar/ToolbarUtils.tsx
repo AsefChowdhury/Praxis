@@ -37,6 +37,19 @@ export const styleMap: Record<TextStyles, EditorCommand> = {
     "Highlight" : {payload: "highlight", command: FORMAT_TEXT_COMMAND}
 }
 
+export const coreTextStylesTooltips: Record<TextStyles, string> = {
+    "Bold" : "Bold (Ctrl + B)",
+    "Italic" : "Italic (Ctrl + I)",
+    "Underline" : "Underline (Ctrl + U)",
+    "Code" : "Insert Code Block (Ctrl + Shift + C)",
+    "Highlight" : "Highlight",
+    "Subscript" : "Subscript (Ctrl + ,)",
+    "Superscript" : "Superscript (Ctrl + .)",
+    "Lowercase" : "Lowercase (Ctrl + Shift + 1)",
+    "Uppercase" : "Uppercase (Ctrl + Shift + 2)",
+    "Strikethrough" : "Strikethrough (Ctrl + Shift + X)"
+}
+
 export function createDropdownStateMap<T extends string>(map: Record<T, StateAndSetter<null | HTMLElement>>){
     return map;
 }

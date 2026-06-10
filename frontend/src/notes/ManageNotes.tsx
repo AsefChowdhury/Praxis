@@ -114,7 +114,6 @@ function EditorUI(props: EditorUIProps){
 
             <RichTextPlugin
                 contentEditable={<ContentEditable className={`note-content ${props.noteMode === "Preview" ? "read-only" : ""}`}/>}
-                placeholder={<div className="placeholder">Enter some text</div>}
                 ErrorBoundary={LexicalErrorBoundary}
             />
             <AutoSavePlugin

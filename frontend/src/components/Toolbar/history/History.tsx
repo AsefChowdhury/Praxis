@@ -1,7 +1,6 @@
 import "./History.css"
 import React, {useEffect, useState} from "react";
-import { handleHistory } from "./HistoryHelper";
-import type { HistoryCommands } from "./HistoryHelper";
+import { type HistoryCommands, handleHistory, historyTooltips } from "./HistoryHelper";
 import { CAN_UNDO_COMMAND, COMMAND_PRIORITY_LOW, CAN_REDO_COMMAND, type LexicalEditor } from "lexical";
 import { ArrowCounterClockwiseIcon, ArrowClockwiseIcon } from "@phosphor-icons/react";
 
@@ -46,6 +45,7 @@ function History({ editor }: {editor: LexicalEditor}) {
             {historyCommands.map(historyCommand => (
                 <button
                 key={historyCommand}
+                title={historyTooltips[historyCommand]}
                 className={`history-button ${(historyCommand === "Undo" && !canUndo) || (historyCommand === "Redo" && !canRedo) ? "disabled" : ""}`}
                 disabled={(historyCommand === "Undo" && !canUndo) || (historyCommand === "Redo" && !canRedo)}
                 onClick={() => {

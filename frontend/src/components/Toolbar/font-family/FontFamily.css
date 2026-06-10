@@ -1,5 +1,6 @@
 .font-family-container{
     position: relative;
+    margin-right: 1em;
 }
 
 .font-family-container .font-button{

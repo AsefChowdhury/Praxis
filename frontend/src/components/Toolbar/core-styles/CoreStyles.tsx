@@ -1,10 +1,11 @@
 import "./CoreStyles.css"
 import Highlighting from "../highlighting/Highlighting";
 import { type LexicalEditor, $getSelection, $isRangeSelection } from "lexical";
-import { type TextStyles, styleMap, executeCommand, CORE_STYLE_ICONS} from "../ToolbarUtils";
+import { type TextStyles, styleMap, executeCommand, CORE_STYLE_ICONS, coreTextStylesTooltips} from "../ToolbarUtils";
 import { useEffect, useState } from "react";
 
 const coreTextStyles: TextStyles[] = ["Bold", "Italic", "Underline", "Code"];
+
 
 
 function CoreStyles({ editor }: {editor : LexicalEditor}) {
@@ -39,6 +40,7 @@ function CoreStyles({ editor }: {editor : LexicalEditor}) {
                 <button 
                 key={coreTextStyle}
                 className={`style-button ${activeCoreStyles.includes(coreTextStyle) ? "active" : ""}`}
+                title={coreTextStylesTooltips[coreTextStyle]}
                 onClick={() => {
                     executeCommand(editor, styleMap[coreTextStyle])
                 }}

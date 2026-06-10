@@ -1,6 +1,8 @@
 .extended-styling-container{
     display: flex;
     position: relative;
+    margin-left: 0.5em;
+    margin-right: 1em;
 }
 
 .extra-styles{
