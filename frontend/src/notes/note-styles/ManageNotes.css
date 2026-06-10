@@ -13,29 +13,27 @@
 .note-content{
     border: 0.075em solid #fff;
     padding: 0.5em 1em;
-    
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
+    border-radius: 0.5em;
+    height: calc(100vh - 350px);
 }
 
 .note-content:focus-within{
     background-color: #242424;
+    outline: 0.15em solid var(--secondary-button-outline);
+    border: transparent;
 }
 
 .note-content p{
     margin: 0;
 }   
 
-.placeholder{
-    position: absolute;
-    top: 8.125em;
-    left: 1em;
-}
-
 .editor-ui {
     width: 100%;
     min-width: 0;
+    margin-bottom: 1em;
 }
 
 .styling-options{
@@ -113,10 +111,6 @@
 /*Mobile (0px-767px) */
 @media (max-width: 767px){
 
-    .note-content{
-        height: 42em;
-    }
-
     .scrollable-toolbar{
         display: flex;
         align-items: center;
@@ -137,10 +131,6 @@
 
 /*Tablet to laptop (768px-1024px)*/
 @media (min-width: 768px) and (max-width:1024px){
-
-    .note-content{
-        height: 40em;
-    }
 
     .scrollable-toolbar{
         display: flex;

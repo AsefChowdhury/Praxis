@@ -2,6 +2,11 @@ import { type LexicalEditor, UNDO_COMMAND, REDO_COMMAND } from "lexical";
 
 export type HistoryCommands = "Undo" | "Redo";
 
+export const historyTooltips: Record<HistoryCommands, string> = {
+    "Undo" : "Undo (Ctrl + Z)",
+    "Redo" : "Redo (Ctrl + Y)"
+}
+
 export function handleHistory(editor: LexicalEditor, historyChoice: string){
     switch (historyChoice) {
         case "Undo":

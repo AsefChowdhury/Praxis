@@ -1,5 +1,8 @@
 .list-formatting-options{
     display: flex;
+    gap: 0.5em;
+    width: 100%;
+    margin-right: 1em;
 }
 
 .list-format-button{
@@ -7,6 +10,7 @@
 }
 
 .list-format-button.active{
-    background-color: rgba(255, 255, 255, 0.75);
-    border-radius: 0.10em;  
+    border-radius: 0.5em;
+    outline: 0.15em solid var(--secondary-button-outline);
+    color: var(--secondary-button-outline);
 }
