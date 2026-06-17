@@ -8,6 +8,7 @@ import CoreStyles from "../components/Toolbar/core-styles/CoreStyles";
 import ExtendedStyles from "../components/Toolbar/extended-styles/ExtendedStyles";
 import ListFormatting from "../components/Toolbar/list-formatting/ListFormatting";
 import AlignmentFormats from "../components/Toolbar/alignment-formats/AlignmentFormats";
+import HeadingFormats from "../components/Toolbar/heading-formats/HeadingFormats";
 import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveStatusDisplay";
 import AutoSavePlugin from "../components/plugins/AutoSavePlugin";
 
@@ -20,6 +21,7 @@ import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
+import { HeadingNode } from "@lexical/rich-text";
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -98,6 +100,7 @@ function EditorUI(props: EditorUIProps){
                             <div className="formatting-options">
                                 <ListFormatting editor={editor}/>
                                 <AlignmentFormats editor={editor}/>
+                                <HeadingFormats editor={editor}/>
                             </div>
     
                         </div>
@@ -134,6 +137,7 @@ const theme = {
         uppercase: 'editor-textUppercase',
         lowercase: 'editor-textLowercase',
         strikethrough: 'editor-textStrikethrough',
+        code : "editor-textCode",
     },
     list: {
         ol: 'editor-list-ol',
@@ -142,6 +146,11 @@ const theme = {
         nested: {
             listitem: 'editor-nested-listitem'
         }
+    },
+    heading: {
+        h1: 'editor-h1',
+        h2: 'editor-h2',
+        h3: 'editor-h3'
     }
 };
 
@@ -161,7 +170,8 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
         namespace: 'MyEditor',
         nodes: [
             ListNode,
-            ListItemNode
+            ListItemNode,
+            HeadingNode,
         ],
         theme,
         onError,
