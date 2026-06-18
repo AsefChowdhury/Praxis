@@ -2,11 +2,11 @@ import { $getSelection, $isRangeSelection, $createParagraphNode, $getNodeByKey, 
 import { $setBlocksType } from "@lexical/selection";
 import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
 
-export type HeadingFormats = "h1" | "h2" | "h3";
-export const headingFormats: (HeadingFormats | null)[] = [null, "h1", "h2", "h3"];
+export type HeadingTypes = "h1" | "h2" | "h3";
+export const headingFormats: (HeadingTypes | null)[] = [null, "h1", "h2", "h3"];
 
 
-function applyHeading(headingChoice: HeadingFormats) {
+function applyHeading(headingChoice: HeadingTypes) {
     const selection = $getSelection();
     if (!$isRangeSelection(selection)) return false;
 
@@ -41,13 +41,13 @@ export function getActiveHeading() {
 
     if ($isHeadingNode(topLevelElement)){
         const tag = topLevelElement.getTag();
-        return (headingFormats as string[]).includes(tag) ? (tag as HeadingFormats) : null;
+        return (headingFormats as string[]).includes(tag) ? (tag as HeadingTypes) : null;
     }
 
     return null;
 }
 
-export function toggleHeading(editor: LexicalEditor, headingChoice: HeadingFormats) {
+export function toggleHeading(editor: LexicalEditor, headingChoice: HeadingTypes) {
     editor.update(() => {
         const activeHeading = getActiveHeading();
 

@@ -1,29 +1,29 @@
 import "./HeadingFormatsStyles.css";
 import Dropdown from "../../dropdown/Dropdown";
 import DropdownItem from "../../dropdown/DropdownItem";
-import { type HeadingFormats, toggleHeading, clearHeading, getActiveHeading, headingFormats } from "./HeadingFormatsHelpers"
+import { type HeadingTypes, toggleHeading, clearHeading, getActiveHeading, headingFormats } from "./HeadingFormatsHelpers"
 import { handleClick, createDropdownStateMap } from "../ToolbarUtils";
 import React, { useEffect, useState } from "react";
 import { type LexicalEditor } from "lexical";
 import { TextHOneIcon, TextHTwoIcon, TextHThreeIcon, TextTIcon, CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react";
 
-const HEADING_ICONS: Record<HeadingFormats, React.FC<React.SVGProps<SVGSVGElement>>> = {
+const HEADING_ICONS: Record<HeadingTypes, React.FC<React.SVGProps<SVGSVGElement>>> = {
     "h1" : TextHOneIcon,
     "h2" : TextHTwoIcon,
     "h3" : TextHThreeIcon,
 }
 
-const headingsTypeMap: Record<HeadingFormats, string> = {
+const headingsTypeMap: Record<HeadingTypes, string> = {
     "h1" : "Heading 1",
     "h2" : "Heading 2",
     "h3" : "Heading 3"
 }
 
-function getHeadingLabel(format: HeadingFormats | null): string {
+function getHeadingLabel(format: HeadingTypes | null): string {
     return format === null ? "Normal Text" : headingsTypeMap[format];
 }
 
-function getHeadingIcon(format: HeadingFormats | null) {
+function getHeadingIcon(format: HeadingTypes | null) {
     return format === null ? TextTIcon : HEADING_ICONS[format];
 }
 
@@ -32,7 +32,7 @@ function HeadingFormats({ editor }: {editor: LexicalEditor}) {
     const dropdownStateMap = createDropdownStateMap({
         "headingFormats" : {state: headingAnchor, setter: setHeadingAnchor}
     })
-    const [currentHeading, setCurrentHeading] = useState<HeadingFormats | null>(null);
+    const [currentHeading, setCurrentHeading] = useState<HeadingTypes | null>(null);
     const activeLabel = getHeadingLabel(currentHeading);
     const CurrentIcon = currentHeading === null ? TextTIcon : HEADING_ICONS[currentHeading];
     const isDropDownOpen = dropdownStateMap.headingFormats.state !== null;
