@@ -1,0 +1,24 @@
+.heading-format-container{
+    position: relative;
+    /* outline: 1px solid red; */
+}
+
+.heading-format-container .heading-button{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+    gap: 1em;
+}
+
+.heading-button-icon{
+    font-size: 20px;
+}
+
+.heading-dropdown-icon{
+    flex-shrink: 0;
+}
+
+#heading-dropdown{
+    width: fit-content;
+}

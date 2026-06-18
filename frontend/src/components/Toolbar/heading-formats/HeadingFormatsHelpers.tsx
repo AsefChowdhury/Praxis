@@ -2,9 +2,11 @@ import { $getSelection, $isRangeSelection, $createParagraphNode, $getNodeByKey, 
 import { $setBlocksType } from "@lexical/selection";
 import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
 
-export type HeadingType = "h1" | "h2" | "h3";
+export type HeadingFormats = "h1" | "h2" | "h3";
+export const headingFormats: (HeadingFormats | null)[] = [null, "h1", "h2", "h3"];
 
-function applyHeading(headingChoice: HeadingType) {
+
+function applyHeading(headingChoice: HeadingFormats) {
     const selection = $getSelection();
     if (!$isRangeSelection(selection)) return false;
 
@@ -19,26 +21,33 @@ function removeHeading() {
      $setBlocksType(selection, () => $createParagraphNode())
 }
 
-function getActiveHeading() {
+export function clearHeading(editor: LexicalEditor) {
+    editor.update(() => {
+        removeHeading();
+    })
+}
+
+export function getActiveHeading() {
     const selection = $getSelection();
-    if (!$isRangeSelection(selection)) return false;
+    if (!$isRangeSelection(selection)) return null;
 
     // Gets anchor node
     const selectionAnchorKey = selection.anchor.key;
     const anchorNode = $getNodeByKey(selectionAnchorKey);
 
-    if (anchorNode === null) return false;
+    if (anchorNode === null) return null;
 
     const topLevelElement = anchorNode.getTopLevelElementOrThrow();
 
     if ($isHeadingNode(topLevelElement)){
-        return topLevelElement.getTag();
+        const tag = topLevelElement.getTag();
+        return (headingFormats as string[]).includes(tag) ? (tag as HeadingFormats) : null;
     }
 
     return null;
 }
 
-export function toggleHeading(editor: LexicalEditor, headingChoice: HeadingType) {
+export function toggleHeading(editor: LexicalEditor, headingChoice: HeadingFormats) {
     editor.update(() => {
         const activeHeading = getActiveHeading();
 
