@@ -11,8 +11,9 @@ import AlignmentFormats from "../components/Toolbar/alignment-formats/AlignmentF
 import HeadingFormats from "../components/Toolbar/heading-formats/HeadingFormats";
 import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveStatusDisplay";
 import AutoSavePlugin from "../components/plugins/AutoSavePlugin";
+import CharacterLimitPlugin from "../components/plugins/CharacterLimitPlugin";
 
-import { type NotePayload, loadNote } from "./NoteUtils";
+import { type NotePayload, loadNote} from "./NoteUtils";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
@@ -85,36 +86,38 @@ function EditorUI(props: EditorUIProps){
                 />
             
             {props.noteMode === "Edit" && (
-                <Toolbar toolbarFeatures={
-                    <> 
-                        <div className="scrollable-toolbar">
-                            <History editor={editor}/>
-                            <FontFamily editor={editor}/>
-                            <Fontsize editor={editor}/>
-    
-                            <div className="styling-options">
-                                <CoreStyles editor={editor}/>
-                                <ExtendedStyles editor={editor}/>
+                <>
+                    <Toolbar toolbarFeatures={
+                        <> 
+                            <div className="scrollable-toolbar">
+                                <History editor={editor}/>
+                                <FontFamily editor={editor}/>
+                                <Fontsize editor={editor}/>
+        
+                                <div className="styling-options">
+                                    <CoreStyles editor={editor}/>
+                                    <ExtendedStyles editor={editor}/>
+                                </div>
+        
+                                <div className="formatting-options">
+                                    <ListFormatting editor={editor}/>
+                                    <AlignmentFormats editor={editor}/>
+                                    <HeadingFormats editor={editor}/>
+                                </div>
+        
                             </div>
-    
-                            <div className="formatting-options">
-                                <ListFormatting editor={editor}/>
-                                <AlignmentFormats editor={editor}/>
-                                <HeadingFormats editor={editor}/>
+        
+                            <div className="toolbar-save-status">
+                                <SaveStatusDisplay saveStatus={props.saveStatus} lastSaved={props.lastSaved}/>
                             </div>
-    
-                        </div>
-    
-                        <div className="toolbar-save-status">
-                            <SaveStatusDisplay saveStatus={props.saveStatus} lastSaved={props.lastSaved}/>
-                        </div>
-                    </>
-                }/>
+                        </>
+                    }/>
+                </>
             )}
             
             <ListPlugin/>
             <TabIndentationPlugin/>
-
+            <CharacterLimitPlugin editor={editor} maxChar={50000}/>
             <RichTextPlugin
                 contentEditable={<ContentEditable className={`note-content ${props.noteMode === "Preview" ? "read-only" : ""}`}/>}
                 ErrorBoundary={LexicalErrorBoundary}
