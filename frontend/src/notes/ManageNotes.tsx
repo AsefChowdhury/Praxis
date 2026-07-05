@@ -13,16 +13,19 @@ import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveSta
 import AutoSavePlugin from "../components/plugins/AutoSavePlugin";
 import CharacterLimitPlugin from "../components/plugins/CharacterLimitPlugin";
 
-import { type NotePayload, loadNote} from "./NoteUtils";
+import { type NotePayload, getWordCountFromState, loadNote} from "./NoteUtils";
+import { charCounter } from "../components/plugins/CharacterLimitHelpers";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { HeadingNode } from "@lexical/rich-text";
+import { LineBreakNode } from "lexical";
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -47,6 +50,10 @@ type EditorUIProps = {
 function EditorUI(props: EditorUIProps){
     const [editor] = useLexicalComposerContext();
     const { noteId: id } = useParams();
+    const [charCount, setCharCount] = useState(0);
+    const [wordCount, setWordCount] = useState(0);
+    const maxChar = 100000;
+    const isAtLimit = charCount >= maxChar;
 
     useEffect(() => {
         const fetchNote = async () => {
@@ -112,12 +119,23 @@ function EditorUI(props: EditorUIProps){
                             </div>
                         </>
                     }/>
+
+                    <div className="editor-meta-info">
+                        <span className="word-counter">{wordCount} {wordCount === 1 ? "Word" : "Words"}</span>
+                        <span className={`character-counter ${isAtLimit ? 'at-limit' : ''}`}>{charCount.toLocaleString()}/{maxChar.toLocaleString()} Characters</span>
+                    </div>
                 </>
             )}
             
             <ListPlugin/>
             <TabIndentationPlugin/>
-            <CharacterLimitPlugin editor={editor} maxChar={50000}/>
+            <CharacterLimitPlugin editor={editor} maxChar={maxChar}/>
+            <OnChangePlugin
+            onChange={(editorState) => {
+                setCharCount(charCounter(editorState));
+                setWordCount(getWordCountFromState(editorState));
+            }}
+            />
             <RichTextPlugin
                 contentEditable={<ContentEditable className={`note-content ${props.noteMode === "Preview" ? "read-only" : ""}`}/>}
                 ErrorBoundary={LexicalErrorBoundary}
@@ -175,6 +193,7 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
             ListNode,
             ListItemNode,
             HeadingNode,
+            LineBreakNode,
         ],
         theme,
         onError,

@@ -17,7 +17,22 @@
     scrollbar-width: thin;
     scrollbar-color: #555 transparent;
     border-radius: 0.5em;
-    height: calc(100vh - 350px);
+    height: calc(100vh - 400px);
+}
+
+.editor-meta-info{
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25em 0.5em;
+    gap: 1em;
+}
+
+.word-count, .character-counter{
+    user-select: none;
+}
+
+.character-counter.at-limit{
+    color: red;
 }
 
 .note-content:focus-within{
