@@ -12,8 +12,9 @@ import HeadingFormats from "../components/Toolbar/heading-formats/HeadingFormats
 import SaveStatusDisplay from "../components/Toolbar/save-status-display/SaveStatusDisplay";
 import AutoSavePlugin from "../components/plugins/AutoSavePlugin";
 import CharacterLimitPlugin from "../components/plugins/CharacterLimitPlugin";
+import useApi from "../authentication/useApi";
 
-import { type NotePayload, getWordCountFromState, loadNote} from "./NoteUtils";
+import { type NotePayload, getWordCountFromState} from "./NoteUtils";
 import { charCounter } from "../components/plugins/CharacterLimitHelpers";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -29,7 +30,6 @@ import { LineBreakNode } from "lexical";
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import api from "../api";
 
 export type saveStatusOptions = "idle" | "saving" | "saved" | "failed";
 export type SavePayload = Partial<NotePayload> & {id: string | null};
@@ -54,20 +54,29 @@ function EditorUI(props: EditorUIProps){
     const [wordCount, setWordCount] = useState(0);
     const maxChar = 100000;
     const isAtLimit = charCount >= maxChar;
+    const api = useApi();
 
     useEffect(() => {
         const fetchNote = async () => {
-            if (id) {
-                const loadedNote = await loadNote(id);
-    
-                if (loadedNote) {
-                    props.onIdChange(loadedNote.id);
-                    props.onTitleChange(loadedNote.note_title);
-                    editor.update(() => {
-                        const newEditorState = editor.parseEditorState(loadedNote.note_content);
-                        editor.setEditorState(newEditorState);
-                    })
+            if (id) {            
+                try {
+                    const result = await api.get(`api/notes/${id}/`);
+                    const loadedNote = result.data;
+                    if (loadedNote) {
+                        props.onIdChange(loadedNote.id);
+                        props.onTitleChange(loadedNote.note_title);
+                        editor.update(() => {
+                            const newEditorState = editor.parseEditorState(loadedNote.note_content);
+                            editor.setEditorState(newEditorState);
+                        })
+                    }
+            
+                } catch (error) {
+                    console.log("Failed to load note from API: ", error);
+                    return null;
                 }
+    
+
             }
         }
 
@@ -185,6 +194,7 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
     const [saveStatus, setSaveStatus] = useState<saveStatusOptions>("idle");
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [noteMode, setNoteMode] = useState<"Preview" | "Edit">(mode);
+    const api = useApi();
     const navigate = useNavigate();
 
     const initialConfig = {

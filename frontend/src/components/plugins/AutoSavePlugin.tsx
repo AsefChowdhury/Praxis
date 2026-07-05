@@ -1,6 +1,6 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useEffect, useRef } from "react";
-import { type NotePayload, editorStateToJSON } from "../../notes/NoteUtils";
+import { editorStateToJSON } from "../../notes/NoteUtils";
 import { type SavePayload } from "../../notes/ManageNotes";
 
 type AutoSavePluginProps = {

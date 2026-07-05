@@ -7,9 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 import DropdownItem from "../components/dropdown/DropdownItem";
 import Dropdown from "../components/dropdown/Dropdown";
-import Modal from "../components/modal/Modal";
 import Card from "../components/card/Card";
-import api from "../api";
+import useApi from "../authentication/useApi";
 
 
 type NoteCardProps = {
@@ -130,6 +129,7 @@ function MyNotes() {
     const userClass = activeSelection === 'Recent' ? 'collapsed' : '';
     const recentNotesList = [...notes].slice(0, 5);
     const allNotesList = [...notes];
+    const api = useApi();
 
     const getNotes = async () => {
         await api

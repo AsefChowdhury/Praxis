@@ -1,14 +1,14 @@
 import { $getRoot, createEditor, type EditorState, type LexicalEditor } from "lexical";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
-import api from "../api";
+import useApi from "../authentication/useApi";
 
 export interface NotePayload {
     id : string | null;
     note_title : string,
     note_content : string;
     author ?: number;
-    updated_at : string
+    updated_at ?: string
 }
 
 const tempConfig = {
@@ -34,16 +34,17 @@ export function editorStateToJSON(editorState : EditorState) {
     return JSON.stringify(editorState.toJSON());
 }
 
-export async function loadNote(noteId: string): Promise<NotePayload | null>{
-    try {
-        const response = await api.get(`api/notes/${noteId}/`);
-        return response.data;
+// export async function loadNote(noteId: string): Promise<NotePayload | null>{
+//     const api = useApi();
+//     try {
+//         const response = await api.get(`api/notes/${noteId}/`);
+//         return response.data;
         
-    } catch (error) {
-        console.log("Failed to load note from API: ", error);
-        return null;
-    }
-}
+//     } catch (error) {
+//         console.log("Failed to load note from API: ", error);
+//         return null;
+//     }
+// }
 
 export function extractPlainTextFromJSON(jsonState: string | null | undefined): string {
     if(!jsonState) return '';

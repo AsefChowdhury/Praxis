@@ -1,4 +1,4 @@
-import { editorToJSON, editorStateToJSON, type NotePayload} from "../../notes/NoteUtils";
+import { editorToJSON, type NotePayload} from "../../notes/NoteUtils";
 import { type LexicalEditor } from "lexical";
 import Button from "../button/Button";
 import SaveIcon from "../../assets/SaveIcon.svg?react"

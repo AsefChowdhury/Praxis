@@ -10,6 +10,7 @@ export default function useApi() {
     useEffect(() => {
         const requestInterceptor = api.interceptors.request.use((config) => {
                 const token = auth?.accessToken;
+                console.log("Token: ", token);
                 if (token && !config.headers.Authorization) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }

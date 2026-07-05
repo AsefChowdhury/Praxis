@@ -8,7 +8,6 @@ import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/icon-button/IconButton";
 import { useEffect, useState } from "react";
-import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
 import Modal from "../components/modal/Modal";
@@ -109,7 +108,7 @@ function ManageDeck(props: ManageDeckProps) {
                         const flashcards: Flashcard[] = response.data.flashcards.map((flashcard: Flashcard) => ({...flashcard, clientId: flashcard.id?.toString(), index: flashcard.index}));
                         setFlashcards(flashcards.sort((a, b) => a.index - b.index));
                     }
-                }).catch(error => {
+                }).catch(() => {
                     toast?.addToast({message: "Something went wrong whilst fetching your deck, please try again", type: "error"});
                 }).finally(() => {
                     setLoading(false);

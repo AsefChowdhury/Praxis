@@ -1,4 +1,4 @@
-import IconButton from "../IconButton/IconButton";
+import IconButton from "../icon-button/IconButton";
 import "./toast.css";
 import close from "../../assets/close.svg?react";
 import Error from "../../assets/error.svg?react";

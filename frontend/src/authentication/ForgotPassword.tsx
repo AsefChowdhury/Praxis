@@ -1,4 +1,4 @@
-import IconButton from "../components/IconButton/IconButton"
+import IconButton from "../components/icon-button/IconButton"
 import NavigationBar from "../components/navigation-bar/NavigationBar"
 import arrow_back from "../assets/arrow_back.svg?react"
 import InputField from "../components/input-field/InputField"

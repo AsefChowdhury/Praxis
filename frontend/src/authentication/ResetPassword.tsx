@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../components/button/Button"
-import IconButton from "../components/IconButton/IconButton"
+import IconButton from "../components/icon-button/IconButton"
 import InputField from "../components/input-field/InputField"
 import api from "../api";
 import visible from "../assets/visible.svg?react"
