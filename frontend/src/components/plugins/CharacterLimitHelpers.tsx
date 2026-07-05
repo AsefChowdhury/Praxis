@@ -1,14 +1,45 @@
-import { $getRoot, $getSelection, $isRangeSelection, BEFORE_INPUT_COMMAND, COMMAND_PRIORITY_LOW, PASTE_COMMAND, type EditorState, type LexicalEditor } from "lexical";
+import { $getRoot, $getSelection, $isElementNode, $isLineBreakNode, $isRangeSelection, $isTextNode, BEFORE_INPUT_COMMAND, COMMAND_PRIORITY_LOW, INSERT_LINE_BREAK_COMMAND, INSERT_PARAGRAPH_COMMAND, PASTE_COMMAND, type EditorState, type LexicalEditor, type LexicalNode } from "lexical";
 
-function charCounter(editorState : EditorState) : number {
+function countNodeChars(node : LexicalNode) : number {
+    let count = 0;
+
+    if (!$isElementNode(node)) {
+        return 0;
+    }
+
+    const children = node.getChildren();
+
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        
+        if ($isTextNode(child)) {
+            count += child.getTextContent().length;
+        }
+        else if ($isLineBreakNode(child)) {
+            count += 1;
+        }
+        else if ($isElementNode(child)){
+            count += countNodeChars(child);
+
+            if (!child.isInline() && i < children.length -1) {
+                count += 1;
+            }
+        }
+    }
+
+    return count;
+}
+
+
+export function charCounter(editorState : EditorState) : number {
     let currentChars = 0;
     editorState.read(() => {
-        currentChars = $getRoot().getTextContent().length;
+        currentChars = countNodeChars($getRoot());
     })
     return currentChars;
 }
 
-function remainingChars(currentChars : number, maxChar : number) : number {
+export function remainingChars(currentChars : number, maxChar : number) : number {
     let charsLeft = maxChar - currentChars;
     return charsLeft;
 }
@@ -83,8 +114,40 @@ export function enforceCharLimit(editor : LexicalEditor, maxChar : number) {
         COMMAND_PRIORITY_LOW
     );
 
+    // For Enter button:
+    const removeInsertParagraphListener = editor.registerCommand(
+        INSERT_PARAGRAPH_COMMAND,
+        () => {
+            let currentChars = charCounter(editor.getEditorState());
+            let charsRemaining = remainingChars(currentChars, maxChar);
+
+            if (charsRemaining <= 0) {
+                return true;
+            }
+            return false;
+        },
+        COMMAND_PRIORITY_LOW
+    );
+
+    // For Shift+Enter button (i.e., Linebreak):
+    const removeLineBreakListener = editor.registerCommand(
+        INSERT_LINE_BREAK_COMMAND,
+        () => {
+            let currentChars = charCounter(editor.getEditorState());
+            let charsRemaining = remainingChars(currentChars, maxChar);
+
+            if (charsRemaining <= 0) {
+                return true;
+            }
+            return false;
+        },
+        COMMAND_PRIORITY_LOW
+    )
+
     return () => {
         removeBeforeInputListner();
         removePasteListener();
+        removeInsertParagraphListener();
+        removeLineBreakListener();
     }
 }

@@ -64,3 +64,24 @@ export function extractPlainTextFromJSON(jsonState: string | null | undefined): 
         return '';
     }
 }
+
+function wordCounter(text: string): number {
+    const trimmedText = text.trim();
+    const regex = /\s+/;
+
+    if (trimmedText !== "") {
+        return trimmedText.split(regex).length;
+    }
+    return 0;
+}
+
+export function getWordCountFromState(editorState: EditorState) {
+    let wordCount = 0;
+    
+    editorState.read(() => {
+        let text = $getRoot().getTextContent();
+        wordCount = wordCounter(text);
+    })
+
+    return wordCount;
+}
