@@ -7,7 +7,7 @@ type DropdownItemProps = {
     text: string;
     to?: string;
     style?: React.CSSProperties;
-    onClick?: () => void
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
 };
 
 function DropdownItem(props: DropdownItemProps){

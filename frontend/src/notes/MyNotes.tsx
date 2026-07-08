@@ -40,12 +40,13 @@ function NoteCard(props: NoteCardProps){
         setDropdownAnchor((prev) => (prev ? null : e.currentTarget));
     }
 
-    const handleModeSelect = (mode: dropdownModes) => {
+    const handleModeSelect = (mode: dropdownModes, e: React.MouseEvent<HTMLAnchorElement>) => {
         setDropdownAnchor(null);
 
         switch (mode) {
             case "Delete":
                 props.onDelete(props.id);
+                e.stopPropagation();
                 break;
 
             default:
@@ -77,7 +78,7 @@ function NoteCard(props: NoteCardProps){
                             <DropdownItem
                                 key={mode}
                                 text={mode}
-                                onClick={() => handleModeSelect(mode)}
+                                onClick={(e) => handleModeSelect(mode, e)}
                             />
                         ))}
                     </Dropdown>
