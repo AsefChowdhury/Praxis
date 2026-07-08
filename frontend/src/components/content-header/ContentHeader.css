@@ -15,6 +15,8 @@
     padding: 2px;
     font-size: x-large;
     font-weight: bolder;
+    border-radius: 0.5em;
+    border: 0.075em solid rgba(255, 255, 255, 0.15)
 }
 
 .textarea-container.note-title.outlined .textarea{
@@ -23,8 +25,9 @@
 }
 
 .textarea-container.note-title.outlined:focus-within .textarea{
-    background-color: var(--accent-color);
-    border-width: 0.1em;
+    background-color: #242424;
+    outline: 0.15em solid var(--secondary-button-outline);
+    border: transparent;
 }
 
 .file-operations-wrapper{
