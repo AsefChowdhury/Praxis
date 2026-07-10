@@ -38,7 +38,9 @@ export type ManageNotesMode = "Preview" | "Edit";
 type EditorUIProps = {
     noteTitle: string;
     nodeId: string | null;
+    noteContent: string;
     onTitleChange: (newTitle: string) => void;
+    onContentChange: (newContent: string) => void;
     onSave: (payload: SavePayload) => void;
     onIdChange: (newId: string | null) => void;
     saveStatus: saveStatusOptions;
@@ -52,6 +54,7 @@ function EditorUI(props: EditorUIProps){
     const { noteId: id } = useParams();
     const [charCount, setCharCount] = useState(0);
     const [wordCount, setWordCount] = useState(0);
+    const [hasLoaded, setHasLoaded] = useState<boolean>(false);
     const maxChar = 100000;
     const isAtLimit = charCount >= maxChar;
     const api = useApi();
@@ -65,10 +68,12 @@ function EditorUI(props: EditorUIProps){
                     if (loadedNote) {
                         props.onIdChange(loadedNote.id);
                         props.onTitleChange(loadedNote.note_title);
+                        props.onContentChange(loadedNote.note_content);
                         editor.update(() => {
                             const newEditorState = editor.parseEditorState(loadedNote.note_content);
                             editor.setEditorState(newEditorState);
                         })
+                        setHasLoaded(true);
                     }
             
                 } catch (error) {
@@ -82,7 +87,7 @@ function EditorUI(props: EditorUIProps){
 
         fetchNote();
 
-    },[id, editor, props.onIdChange, props.onTitleChange]);
+    },[id, editor, props.onIdChange, props.onTitleChange, props.onContentChange]);
 
     useEffect(() => {
         editor.setEditable(props.noteMode === "Edit");
@@ -149,11 +154,14 @@ function EditorUI(props: EditorUIProps){
                 contentEditable={<ContentEditable className={`note-content ${props.noteMode === "Preview" ? "read-only" : ""}`}/>}
                 ErrorBoundary={LexicalErrorBoundary}
             />
-            <AutoSavePlugin
-                onSave={props.onSave}
-                noteId={props.nodeId}
-                noteTitle={props.noteTitle}
-            />    
+            {(id == null || hasLoaded) && (
+                <AutoSavePlugin
+                    onSave={props.onSave}
+                    noteId={props.nodeId}
+                    noteTitle={props.noteTitle}
+                    initalContent={props.noteContent}
+                />    
+            )}
             <HistoryPlugin/>
         </div>
     )
@@ -191,6 +199,7 @@ function onError(error:Error): void {
 function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
     const [noteTitle, setNoteTitle] = useState<string>('Untitled Note');
     const [noteId, setNoteId] = useState<string | null>(null);
+    const [noteContent, setNoteContent] = useState<string>('');
     const [saveStatus, setSaveStatus] = useState<saveStatusOptions>("idle");
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [noteMode, setNoteMode] = useState<"Preview" | "Edit">(mode);
@@ -275,6 +284,7 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
                     <EditorUI 
                         noteTitle={noteTitle}
                         nodeId={noteId}
+                        noteContent={noteContent}
                         onTitleChange={setNoteTitle}
                         onIdChange={setNoteId}
                         onSave={handleNoteSave}
@@ -282,6 +292,7 @@ function ManageNotes({ mode = "Edit" } : { mode?: ManageNotesMode}) {
                         lastSaved={lastSaved}
                         noteMode={noteMode}
                         onModeChange={handleModeSwitch}
+                        onContentChange={setNoteContent}
                     />
                 </LexicalComposer>
             </div>

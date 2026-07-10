@@ -6,7 +6,7 @@ import SaveStatusDisplay from "../Toolbar/save-status-display/SaveStatusDisplay"
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { type SavePayload, type ManageNotesMode, type saveStatusOptions } from "../../notes/ManageNotes";
-import { useRef} from "react";
+import { useEffect, useRef} from "react";
 
 type ContentHeaderProps = {
     title: string;
@@ -23,6 +23,7 @@ type ContentHeaderProps = {
 function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, currentMode, saveStatus, lastSaved} : ContentHeaderProps) {
     const [editor] = useLexicalComposerContext();
     const originalTitleRef = useRef(title);
+    const hasInitialisedRef = useRef<Boolean>(true);
 
     const handleTitleFocus = () => {
         originalTitleRef.current = title;
@@ -39,6 +40,13 @@ function ContentHeader({ title, onTitleChange, id, onSave, onModeChange, current
             originalTitleRef.current = newTitle;
         }
     }
+
+    useEffect(() => {
+        if (hasInitialisedRef.current) {
+            originalTitleRef.current = title;
+            hasInitialisedRef.current = false;
+        }
+    },[title])
 
     return(
         <div className="header-container">

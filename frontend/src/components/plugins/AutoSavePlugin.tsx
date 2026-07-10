@@ -6,24 +6,32 @@ import { type SavePayload } from "../../notes/ManageNotes";
 type AutoSavePluginProps = {
     noteId: string | null;
     noteTitle: string;
+    initalContent: string;
     onSave: (payload: SavePayload) => void;
 }
 
-function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
+function AutoSavePlugin({ onSave, noteId, noteTitle, initalContent } : AutoSavePluginProps) {
     const [editor] = useLexicalComposerContext();
     const debounceTimerRef = useRef<number | null>(null);
     const safetyTimerRef = useRef<number | null>(null);
-    const lastSavedContentRef = useRef<string | null>(null);
-    const lastSavedTitleRef = useRef<string | null>(null);
+    const lastSavedContentRef = useRef<string | null>(initalContent);
+    const lastSavedTitleRef = useRef<string | null>(noteTitle);
     let latestDocRef = useRef<string | null>(null);
 
     useEffect(() => {
         const performSave = () => {
+            console.log("performSave running:", Date.now());
             let content = latestDocRef.current;
             if(content === null) return;
 
+            console.log("content string:", content);
+            console.log("lastSaved string:", lastSavedContentRef.current);
+            console.log("are they equal?:", content === lastSavedContentRef.current);
+
             const contentHadChanged = content !== lastSavedContentRef.current;
             const titleHasChanged = noteTitle !== lastSavedTitleRef.current;
+
+            console.log("titleHasChanged:", titleHasChanged, "noteTitle:", noteTitle, "lastSavedTitleRef:", lastSavedTitleRef.current);
 
             if(!contentHadChanged && !titleHasChanged){
                 if(debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
@@ -53,7 +61,7 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
                     payloadToSend = {...payloadToSend, note_title: noteTitle};
                 }
             }
-
+            console.log("ACTUAL SAVE HAPPENING NOW");
             onSave(payloadToSend);
 
             lastSavedContentRef.current = content;
@@ -67,6 +75,7 @@ function AutoSavePlugin({ onSave, noteId, noteTitle } : AutoSavePluginProps) {
         }
 
         const unregisterListener = editor.registerUpdateListener(({ editorState }) => {
+            console.log("update listener fired");
             latestDocRef.current = editorStateToJSON(editorState);
 
             if(debounceTimerRef.current){
