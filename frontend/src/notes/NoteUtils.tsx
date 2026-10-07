@@ -1,7 +1,7 @@
 import { $getRoot, createEditor, type EditorState, type LexicalEditor } from "lexical";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
-import useApi from "../authentication/useApi";
+//import useApi from "../authentication/useApi";
 
 export interface NotePayload {
     id : string | null;

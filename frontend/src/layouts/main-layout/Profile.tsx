@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './main-layout-styles/Profile.css'
 import settings from '../../assets/settings.svg?react'
 import light from '../../assets/light.svg?react'
-import dark from '../../assets/dark.svg?react'
+//import dark from '../../assets/dark.svg?react'
 import logoutIcon from '../../assets/logout.svg?react'
 import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';

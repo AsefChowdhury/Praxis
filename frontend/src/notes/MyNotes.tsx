@@ -1,5 +1,5 @@
 import "./note-styles/MyNotes.css";
-import { DotsThreeVerticalIcon, PencilLineIcon, TrashIcon } from "@phosphor-icons/react";
+import { DotsThreeVerticalIcon } from "@phosphor-icons/react";
 import { extractPlainTextFromJSON, type NotePayload } from "./NoteUtils";
 import { CaretDownIcon } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
@@ -122,8 +122,8 @@ const createPreview = (content: string | null | undefined, contentType: "title" 
 
 function MyNotes() {
     const [notes, setNotes] = useState<NotePayload[]>([]);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [noteToDelete, setNoteToDelete] = useState({id: 0, title: undefined});
+    //const [showDeleteModal, setShowDeleteModal] = useState(false);
+    //const [noteToDelete, setNoteToDelete] = useState({id: 0, title: undefined});
     const [activeSelection, setActiveSelection] = useState<'Recent' | 'User' | null>(null);
 
     const recentClass = activeSelection === 'User' ? 'collapsed' : '';

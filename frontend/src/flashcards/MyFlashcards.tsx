@@ -53,7 +53,7 @@ function MyFlashcards() {
         .then(response => {
             setDecks(response.data);
         })
-        .catch(error => {
+        .catch(() => {
             toast?.addToast({message: "Something went wrong whilst fetching your decks, please try again", type: "error"});
         })
         .finally(() => {
@@ -73,7 +73,7 @@ function MyFlashcards() {
                 toast?.addToast({message: `Deck "${deckToDelete.title}" has been deleted`, type: "success"});
             }
         })
-        .catch(error => {
+        .catch(() => {
             toast?.addToast({message: "Something went wrong whilst deleting your deck, please try again", type: "error"});
         })
         .finally(() => {
