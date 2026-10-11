@@ -20,3 +20,7 @@ note_serializer_cases = [
     # note_title exceeding max_length (101 chars) — invalid
     ({"note_title": "A" * 101, "note_content": "Some content"}, False),
 ]
+
+note_str_returns_title_cases = [
+    ("test note", "some note content", "test note")
+]
