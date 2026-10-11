@@ -29,3 +29,7 @@ note_str_returns_title_cases = [
     ("Title with !@# symbols & spaces", "Content here", "Title with !@# symbols & spaces"),
     ("单元测试", "Unicode title content", "单元测试"),  # non-ASCII characters
 ]
+
+note_author_case = [
+    ("test note", "some note content")
+]
