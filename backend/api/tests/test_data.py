@@ -22,5 +22,10 @@ note_serializer_cases = [
 ]
 
 note_str_returns_title_cases = [
-    ("test note", "some note content", "test note")
+    ("test note", "some note content", "test note"),
+    ("Water Cycle Notes", "Evaporation, condensation, precipitation.", "Water Cycle Notes"),
+    ("A" * 100, "Some content", "A" * 100),  # title at max length boundary
+    ("", "Content with empty title", ""),  # edge case: empty title
+    ("Title with !@# symbols & spaces", "Content here", "Title with !@# symbols & spaces"),
+    ("单元测试", "Unicode title content", "单元测试"),  # non-ASCII characters
 ]
