@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     password_changed_date = models.DateTimeField(null=True, blank=True)
 
 class Note(models.Model):
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='Notes')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='notes')
     note_title = models.CharField(max_length=100)
     note_content = models.TextField()
     updated_at = models.DateTimeField(auto_now=True)
