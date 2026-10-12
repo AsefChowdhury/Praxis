@@ -37,3 +37,15 @@ note_author_case = [
 note_cascade_delete_case = [
     ("test note", "some note content")
 ]
+
+note_title_max_length_cases = [
+    ("test note", "some note content", True),
+    ("A" * 100, "Some content", True),
+    ("A" * 101, "Some content", False),
+
+    # empty title — blank=False by default on CharField, should be invalid
+    ("", "Some content", False),
+
+    # significantly over the limit, not just by 1 char
+    ("A" * 200, "Some content", False),
+]
