@@ -49,3 +49,7 @@ note_title_max_length_cases = [
     # significantly over the limit, not just by 1 char
     ("A" * 200, "Some content", False),
 ]
+
+note_updated_at_cases = [
+    ("test note", "some note content", "updated note content", False)
+]
