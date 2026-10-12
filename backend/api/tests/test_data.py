@@ -33,3 +33,7 @@ note_str_returns_title_cases = [
 note_author_case = [
     ("test note", "some note content")
 ]
+
+note_cascade_delete_case = [
+    ("test note", "some note content")
+]
