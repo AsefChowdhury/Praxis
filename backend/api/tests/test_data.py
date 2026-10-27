@@ -53,3 +53,13 @@ note_title_max_length_cases = [
 note_updated_at_cases = [
     ("test note", "some note content", "updated note content", False)
 ]
+
+test_note_filter_by_author_cases = [
+    (
+        "test note title",
+        "test note content",
+        "test note title version 2",
+        "test note content version 2",
+        ["test note title", "test note title version 2"]
+    ),
+]
