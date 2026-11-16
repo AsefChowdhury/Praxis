@@ -1,10 +1,11 @@
 from ..views import NoteViewSet
 from ..models import Note, CustomUser
 from .test_data import (
-    test_note_filter_by_author_cases
+    test_note_filter_by_author_cases,
+    test_note_ordering_cases,
 )
 from rest_framework.test import APIClient
-import pytest
+import pytest, time
 
 @pytest.fixture
 def make_user(db):
@@ -54,4 +55,25 @@ def test_note_viewset_queryset_filters_by_author(client, make_user, note_title1,
     # assert user 2 doesn't have any of user 1 notes, i.e, it should return empty
     assert len(returned_note_titles) == 0
 
+@pytest.mark.parametrize("note_title1, note_content1, note_title2, note_content2, expected_result", test_note_ordering_cases)
+def test_note_viewset_queryset_orders_by_updated_at_desc(client, make_user, note_title1, note_content1, note_title2, note_content2, expected_result):
+    # User setup
+    user = make_user("user", "user@test.com")
+    client.force_authenticate(user=user)
 
+    # Note setup
+    notes = [
+        Note(author=user, note_title=note_title1, note_content=note_content1),
+        Note(author=user, note_title=note_title2, note_content=note_content2)
+        ]
+
+    # Note saving with delay
+    notes[0].save()
+    time.sleep(1)
+    notes[1].save()
+
+    # Get notes and their titles
+    returned_notes = client.get('/api/notes/')
+    returned_note_titles = [note["note_title"] for note in returned_notes.data]
+
+    assert returned_note_titles == expected_result

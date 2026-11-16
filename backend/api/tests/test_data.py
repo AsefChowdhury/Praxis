@@ -63,3 +63,13 @@ test_note_filter_by_author_cases = [
         ["test note title", "test note title version 2"]
     ),
 ]
+
+test_note_ordering_cases = [
+        (
+        "test note title",
+        "test note content",
+        "test note title version 2",
+        "test note content version 2",
+        ["test note title version 2", "test note title"]
+    ),
+]
