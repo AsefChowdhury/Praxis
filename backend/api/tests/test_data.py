@@ -73,3 +73,10 @@ test_note_ordering_cases = [
         ["test note title version 2", "test note title"]
     ),
 ]
+
+test_note_attaches_author_cases = [
+    (
+        "test note title",
+        "test note content"
+    )
+]

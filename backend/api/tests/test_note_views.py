@@ -3,6 +3,7 @@ from ..models import Note, CustomUser
 from .test_data import (
     test_note_filter_by_author_cases,
     test_note_ordering_cases,
+    test_note_attaches_author_cases
 )
 from rest_framework.test import APIClient
 import pytest, time
@@ -77,3 +78,21 @@ def test_note_viewset_queryset_orders_by_updated_at_desc(client, make_user, note
     returned_note_titles = [note["note_title"] for note in returned_notes.data]
 
     assert returned_note_titles == expected_result
+
+@pytest.mark.parametrize("note_title, note_content", test_note_attaches_author_cases)
+def test_note_viewset_perform_create_attaches_author(client, make_user, note_title, note_content):
+    # User setup
+    user = make_user("user", "user@test.com")
+    client.force_authenticate(user=user)
+
+    # Note setup and POST
+    note = {
+        "note_title" : note_title,
+        "note_content" : note_content
+    }
+    response = client.post('/api/notes/', note)
+
+    # Confirm note creation and correct user attachment
+    assert response.status_code == 201
+    assert response.data["author"] == user.id
+    
