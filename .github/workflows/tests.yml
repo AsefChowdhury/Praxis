@@ -2,7 +2,7 @@ name: Run Tests
 
 on:
   push:
-    branches: [ note-creation, main ]
+    branches: [ feat/note-creation, main ]
   pull_request:
     branches: [ main ]
 
